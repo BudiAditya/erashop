@@ -16,5 +16,5 @@
 		Please check your controller in folder 'controller<?php print($folder); ?>'
 	</h3>
 	<?php print($helper->a("Go to home", $helper->url("home"))); ?>
-</body>
+<!-- </body> -->
 </html>

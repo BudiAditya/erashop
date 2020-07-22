@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php /** @var $suppliers Contacts[] */ ?>
 <head>
 	<title>ERASYS - Rekapitulasi Retur Pembelian</title>
@@ -219,5 +219,5 @@ if ($JnsLaporan < 3){
     </table>
     <!-- end web report -->
 <?php }} ?>
-</body>
+<!-- </body> -->
 </html>

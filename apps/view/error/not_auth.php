@@ -17,5 +17,5 @@
 		Trying to access : '<?php printf("%s/%s", $fqn, $method); ?>'
 	</h3>
 	<?php print($helper->a("Go to home", $helper->url("home"))); ?>
-</body>
+<!-- </body> -->
 </html>

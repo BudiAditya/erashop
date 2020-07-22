@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $apreturn ApReturn */ ?>
 <head>
@@ -120,7 +120,7 @@
 </div>
 
 <div id="ft" style="padding:5px; text-align: center; font-family: verdana; font-size: 9px" >
-    Copyright &copy; 2016  CV. Erasystem Infotama
+    Copyright &copy; 2016 - 2020 <a href='http://rekasys.com'>Rekasys Inc</a>
 </div>
-</body>
+<!-- </body> -->
 </html>

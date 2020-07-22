@@ -64,7 +64,7 @@
         </div>
     </form>
     <br>
-	<form id="frm" action="<?php printf($helper->site_url('master.useracl/add/%s'), $userdata->UserUid); ?>" method="post">
+	<form id="frm" action="<?php printf($helper->site_url('master.useracl/add/%d/%d'), $userdata->UserUid,$ucabId); ?>" method="post">
 		<div>
 			<input type="hidden" name="CabangId" id="CabangId" value="<?php print($ucabId);?>"/>
 			<label for="xCabangId">Hak Akses Cabang:</label>
@@ -142,5 +142,5 @@
 		</div>
 	</form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

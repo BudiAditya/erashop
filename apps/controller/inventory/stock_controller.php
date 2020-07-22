@@ -20,7 +20,7 @@ class StockController extends AppController {
         $settings["columns"][] = array("name" => "a.item_code", "display" => "Kode", "width" => 120);
         $settings["columns"][] = array("name" => "a.bnama", "display" => "Nama Barang", "width" =>300);
         $settings["columns"][] = array("name" => "a.bsatbesar", "display" => "Satuan", "width" =>100);
-        $settings["columns"][] = array("name" => "format(a.qty_stock,0)", "display" => "Qty Stock", "width" => 70, "align" => "right");
+        $settings["columns"][] = array("name" => "format(a.qty_stock,2)", "display" => "Qty Stock", "width" => 70, "align" => "right");
         $settings["columns"][] = array("name" => "a.supplier_name", "display" => "Supplier", "width" =>150);
 
         $settings["filters"][] = array("name" => "a.item_code", "display" => "Kode Barang");

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php /** @var $suppliers Contacts[] */ ?>
 
 <head>
@@ -238,5 +238,5 @@
             ?>
         </table>
 <?php }} ?>
-</body>
+<!-- </body> -->
 </html>

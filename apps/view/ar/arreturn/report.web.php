@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php /** @var $customers Contacts[] */ ?>
 <head>
 	<title>ERASYS - Rekapitulasi Retur Penjualan</title>
@@ -220,5 +220,5 @@
         </table>
         <!-- end web report -->
 <?php }} ?>
-</body>
+<!-- </body> -->
 </html>

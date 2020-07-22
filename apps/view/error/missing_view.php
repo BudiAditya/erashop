@@ -16,5 +16,5 @@
 		View seek location : '<?php printf("view%s/%s", $folder, $controller); ?>' folder
 	</h3>
 	<?php print($helper->a("Go to home", $helper->url("home"))); ?>
-</body>
+<!-- </body> -->
 </html>

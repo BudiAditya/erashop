@@ -132,7 +132,7 @@ $qJenis = 0;
 $qTotal = 0;
 foreach($invoice->Details as $idx => $detail) {
 	$pdf->Ln(5);
-	$pdf->Cell(18,5,$detail->Qty.' '.left(strtolower($detail->SatBesar).'   ',3),0,0,"R");
+	$pdf->Cell(18,5,$detail->Qty.' '.left(strtolower($detail->SatJual).'   ',3),0,0,"R");
 	if (($detail->ItemNote == '')||($detail->ItemNote == null)){
 		$pdf->Cell(97, 5, $detail->ItemCode . ' - ' . $detail->ItemDescs, 0, 0, "L");
 	}else {

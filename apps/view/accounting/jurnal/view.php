@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $jurnal Jurnal */ /** $coas CoaDetail[] */
 ?>
@@ -107,5 +107,5 @@
         </table>
     </div>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

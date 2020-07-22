@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var */
 ?>
@@ -56,5 +56,5 @@
         </li>
     </ol>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

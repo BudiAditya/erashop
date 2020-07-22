@@ -189,5 +189,5 @@
         <a href="<?php print($burl); ?>" type="button"><?php print($dft);?></a>
     </div>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

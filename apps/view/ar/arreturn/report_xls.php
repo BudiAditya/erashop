@@ -73,21 +73,21 @@ if ($JnsLaporan < 3) {
             } else {
                 $sma = true;
             }
-            if (!$sma) {
-                $csi = $rpt["customer_name"].' ('.$row["customer_code"].')';
-                $sheet->setCellValue("A$row",$nmr);
-                $sheet->getStyle("A$row")->applyFromArray($center);
-                $sheet->setCellValue("B$row",$rpt["cabang_code"]);
-                $sheet->setCellValue("C$row",date('d-m-Y',strtotime($rpt["rj_date"])));
-                $sheet->setCellValue("D$row",$rpt["rj_no"]);
-                $sheet->setCellValue("E$row",$csi);
-                $sheet->setCellValue("F$row",$rpt["rj_descs"]);
-                $sheet->setCellValue("G$row",$rpt["rj_amount"]);
-                $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
-            }
+            //if (!$sma) {
+            $csi = $rpt["customer_name"] . ' (' . $row["customer_code"] . ')';
+            $sheet->setCellValue("A$row", $nmr);
+            $sheet->getStyle("A$row")->applyFromArray($center);
+            $sheet->setCellValue("B$row", $rpt["cabang_code"]);
+            $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["rj_date"])));
+            $sheet->setCellValue("D$row", $rpt["rj_no"]);
+            $sheet->setCellValue("E$row", $csi);
+            $sheet->setCellValue("F$row", $rpt["rj_descs"]);
+            $sheet->setCellValue("G$row", $rpt["rj_amount"]);
+            $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
+            //}
             if ($JnsLaporan == 2) {
                 $sheet->setCellValue("H$row", $rpt['ex_invoice_no']);
-                $sheet->setCellValueExplicit("I$row", $rpt['item_code'],PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("I$row", $rpt['item_code'], PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue("J$row", $rpt['item_descs']);
                 $sheet->setCellValue("K$row", $rpt['qty_retur']);
                 $sheet->setCellValue("L$row", $rpt['price']);

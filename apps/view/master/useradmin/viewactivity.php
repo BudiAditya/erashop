@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
 	<title>ERASHOP - System User Activity Log</title>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
@@ -71,5 +71,5 @@
     </table>
     <!-- end web report -->
 <?php } ?>
-</body>
+<!-- </body> -->
 </html>

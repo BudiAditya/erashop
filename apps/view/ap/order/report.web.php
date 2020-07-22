@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
 	<title>ERASHOP - Rekapitulasi Nota/Invoice/Tagihan</title>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
@@ -188,5 +188,5 @@
     </table>
 <!-- end web report -->
 <?php } ?>
-</body>
+<!-- </body> -->
 </html>

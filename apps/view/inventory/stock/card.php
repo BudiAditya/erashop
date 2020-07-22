@@ -89,12 +89,12 @@
                     }
                     printf('<td><a href="%s" target="_blank">%s</a></td>',$helper->site_url($row["trx_url"]),$row["trx_type"]);
                     printf('<td>%s</td>',$row["relasi"]);
-                    printf('<td class="right">%s</td>',$row["awal"] > 0 ? number_format($row["awal"],0) : '');
-                    printf('<td class="right">%s</td>',$row["masuk"] > 0 ? number_format($row["masuk"],0) : '');
-                    printf('<td class="right">%s</td>',$row["keluar"] > 0 ? number_format($row["keluar"],0) : '');
-                    printf('<td class="right">%s%s</td>',$row["koreksi"] > 0 ? '+' : '', $row["koreksi"] <> 0 ? number_format($row["koreksi"],0) : '');
+                    printf('<td class="right">%s</td>',$row["awal"] > 0 ? number_format($row["awal"],2) : '');
+                    printf('<td class="right">%s</td>',$row["masuk"] > 0 ? number_format($row["masuk"],2) : '');
+                    printf('<td class="right">%s</td>',$row["keluar"] > 0 ? number_format($row["keluar"],2) : '');
+                    printf('<td class="right">%s%s</td>',$row["koreksi"] > 0 ? '+' : '', $row["koreksi"] <> 0 ? number_format($row["koreksi"],2) : '');
                     $saldo = ($saldo + $row["awal"] + $row["masuk"]) - $row["keluar"] + $row["koreksi"];
-                    printf('<td class="right">%s</td>',number_format($saldo,0));
+                    printf('<td class="right">%s</td>',number_format($saldo,2));
                     print('</tr>');
                     $trxdate = $row["trx_date"];
                 }
@@ -103,5 +103,5 @@
         </table>
     </form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

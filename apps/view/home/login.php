@@ -126,5 +126,5 @@
 	</script>
 	<?php } ?>
 </div>
-</body>
+<!-- </body> -->
 </html>

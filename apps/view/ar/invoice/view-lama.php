@@ -21,8 +21,9 @@
 
 <script type="text/javascript" src="<?php print($helper->path("public/js/jquery.easyui.min.js")); ?>"></script>
 
-<!-- direct printing -->
-<script src="<?php print($helper->path("public/js/recta.js"));?>"></script>
+<script type="text/javascript" src="<?php print($helper->path("public/js/qz/dependencies/rsvp-3.1.0.min.js")); ?>"></script>
+<script type="text/javascript" src="<?php print($helper->path("public/js/qz/dependencies/sha-256.min.js")); ?>"></script>
+<script type="text/javascript" src="<?php print($helper->path("public/js/qz/qz-tray.js")); ?>"></script>
 
 <style scoped>
     .f1{
@@ -30,7 +31,6 @@
     }
 </style>
 <script type="text/javascript">
-    var printer = new Recta('1122334455', '1811');
     $( function() {
         $('#CustomerId').combogrid({
             panelWidth:600,
@@ -66,12 +66,22 @@
         });
 
         $("#bCetak").click(function(){
+            var uip = '<?php print($userIpAdd);?>';
+            var ptp = <?php print($userCabRpm);?>;
             var printCnt = <?php print($invoice->PrintCount);?>;
-            if (printCnt > 1){
+            if (printCnt > 0){
                 alert('ER - Invoice/Struk sudah pernah di-print!');
             }else {
-                if (confirm('Cetak Struk Invoice ini?')) {
-                    rectaPrint();
+                if ((uip.substr(0, 3) == '127') || (uip.substr(0, 3) == '::1') && (ptp == 1 || ptp == 4)) {
+                    if (confirm('Cetak Struk Invoice ini?')) {
+                        $.get('<?php print($helper->site_url("ar.invoice/printdirect/").$invoice->Id."/".$userCabRpm."/".$userCabRpn); ?>', function (e) {
+                            alert('OK - Send Data to Printer');
+                        });
+                    }
+                } else {
+                    if (confirm('Cetak invoice ini?')) {
+                        printDirect()
+                    }
                 }
             }
         });
@@ -115,64 +125,6 @@
         });
     }
 
-    function rectaPrint() {
-        var urx = "<?php print($helper->site_url("ar/invoice/getStrukData"));?>";
-        var ivi = "<?php print($invoice->Id);?>";
-        var dvalue = {ivid: ivi};
-        $.ajax(
-            {
-                url : urx,
-                type: "POST",
-                data : dvalue,
-                success: function(data, textStatus, jqXHR)
-                {
-                    printer.open().then(function () {
-                        $.each(JSON.parse(data), function () {
-                            $.each(this, function (name, value) {
-                                //console.log(name + '=' + value);
-                                if (name == 'format'){
-                                    switch(value) {
-                                        case "AC":
-                                            printer.align('center');
-                                            break;
-                                        case "AL":
-                                            printer.align('left');
-                                            break;
-                                        case "AR":
-                                            printer.align('right');
-                                            break;
-                                        case "B1":
-                                            printer.bold(true);
-                                            break;
-                                        case "B0":
-                                            printer.bold(false);
-                                            break;
-                                        case "U1":
-                                            printer.underline(true);
-                                            break;
-                                        case "U0":
-                                            printer.underline(false);
-                                            break;
-                                        default:
-                                            printer.align('left');
-                                            break;
-                                    }
-                                }else {
-                                    printer.text(value);
-                                }
-                            });
-                        });
-                        printer.feed(7);
-                        printer.cut();
-                        printer.print();
-                    })
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus);
-                }
-            });
-    }
 </script>
 <style type="text/css">
     #fd{
@@ -282,7 +234,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                 </select>
                 &nbsp
                 Kredit
-                <input type="text" class="easyui-textbox" id="CreditTerms" name="CreditTerms" size="2" maxlength="5" value="<?php print($invoice->CreditTerms != null ? $invoice->CreditTerms : 0); ?>" style="text-align: right" readonly/>&nbsphari</td>
+                <input type="text" class="f1 easyui-textbox" id="CreditTerms" name="CreditTerms" size="2" maxlength="5" value="<?php print($invoice->CreditTerms != null ? $invoice->CreditTerms : 0); ?>" style="text-align: right" readonly/>&nbsphari</td>
         </tr>
         <tr>
             <td colspan="7">
@@ -316,7 +268,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                         printf('<td>%s</td>', $detail->ItemCode);
                         printf('<td>%s</td>', $detail->ItemDescs);
                         printf('<td>%s</td>', $detail->ItemNote);
-                        printf('<td class="right">%s</td>', number_format($detail->Qty,2));
+                        printf('<td class="right">%s</td>', number_format($detail->Qty,1));
                         printf('<td>%s</td>', $detail->SatJual);
                         printf('<td class="right">%s</td>', number_format($detail->Price,0));
                         printf('<td class="right">%s</td>', $detail->DiscFormula);
@@ -375,15 +327,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                         <td colspan="8"><b><input type="text" class="bold" id="OtherCosts" name="OtherCosts" size="60" maxlength="150" value="<?php print($invoice->OtherCosts != null ? $invoice->OtherCosts : '-'); ?>"/></b></td>
                         <td><input type="text" class="right bold" style="width: 150px" id="OtherCostsAmount" name="OtherCostsAmount" value="<?php print($invoice->OtherCostsAmount != null ? number_format($invoice->OtherCostsAmount,0) : 0); ?>"/></td>
                         <?php if ($acl->CheckUserAccess("ar.invoice", "print")) { ?>
-                            <td class='center'>
-                                <?php
-                                if ($userCabRpm == 4){
-                                    printf('<img src="%s" id="bCetak" alt="Cetak Invoice" title="Proses cetak invoice" style="cursor: pointer;"/>',$bcetak);
-                                }else {
-                                    printf('<img src="%s" id="bCetakPdf" alt="Cetak PDF Invoice" title="Proses cetak PDF invoice" style="cursor: pointer;"/>', $bpdf);
-                                }
-                                ?>
-                            </td>
+                            <td class='center'><?php printf('<img src="%s" id="bCetak" alt="Cetak Invoice" title="Proses cetak invoice" style="cursor: pointer;"/>',$bcetak);?></td>
                         <?php }else{ ?>
                             <td>&nbsp</td>
                         <?php } ?>

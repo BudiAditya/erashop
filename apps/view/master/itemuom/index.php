@@ -179,5 +179,5 @@
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUom()" style="width:90px">Save</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
 </div>
-</body>
+<!-- </body> -->
 </html>

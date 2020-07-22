@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php /** @var $customers Contacts[] */ /** @var $sales Karyawan[] */ ?>
 <head>
 	<title>ERASYS - Rekapitulasi Nota/Invoice/Piutang</title>
@@ -136,13 +136,15 @@
                 <th>Tanggal</th>
                 <th>No. Invoice</th>
                 <th>Customer</th>
-                <th>Keterangan</th>
-                <th>Salesman</th>
-                <th>JTP</th>
-                <th>Jumlah</th>
-                <th>Terbayar</th>
-                <th>Outstanding</th>
-                <?php
+                <?php if ($JnsLaporan == 1) { ?>
+                    <th>Keterangan</th>
+                    <th>Salesman</th>
+                    <th>JTP</th>
+                    <th>Jumlah</th>
+                    <th>Terbayar</th>
+                    <th>Outstanding</th>
+                    <?php
+                }
                 if ($JnsLaporan == 2){
                     print("<th nowrap='nowrap'>Kode Barang</th>");
                     print("<th nowrap='nowrap'>Nama Barang</th>");
@@ -166,59 +168,66 @@
                 $ivn = null;
                 $sma = false;
                 while ($row = $Reports->FetchAssoc()) {
-                    if ($ivn <> $row["invoice_no"]){
+                    if ($ivn <> $row["invoice_no"]) {
                         $nmr++;
                         $sma = false;
-                    }else{
+                    } else {
                         $sma = true;
                     }
+                    $sma = false;
                     if (!$sma) {
                         $url = $helper->site_url("ar.invoice/view/" . $row["id"]);
                         print("<tr valign='Top'>");
                         printf("<td>%s</td>", $nmr);
                         printf("<td nowrap='nowrap'>%s</td>", $row["cabang_code"]);
-                        printf("<td>%s</td>", date('d-m-Y', strtotime($row["invoice_date"])));
-                        printf("<td><a href= '%s' target='_blank'>%s</a></td>", $url, $row["invoice_no"]);
+                        printf("<td nowrap='nowrap'>%s</td>", date('d-m-Y', strtotime($row["invoice_date"])));
+                        printf("<td nowrap='nowrap'><a href= '%s' target='_blank'>%s</a></td>", $url, $row["invoice_no"]);
                         printf("<td nowrap='nowrap'>%s</td>", $row["customer_name"]);
-                        printf("<td nowrap='nowrap'>%s</td>", $row["invoice_descs"]);
-                        printf("<td nowrap='nowrap'>%s</td>", $row["sales_name"]);
-                        printf("<td>%s</td>", date('d-m-Y', strtotime($row["due_date"])));
-                        printf("<td align='right'>%s</td>", number_format($row["total_amount"], 0));
-                        printf("<td align='right'>%s</td>", number_format($row["paid_amount"], 0));
-                        printf("<td align='right'>%s</td>", number_format($row["balance_amount"], 0));
-                        if ($JnsLaporan == 1){
+                        if ($JnsLaporan == 1) {
+                            printf("<td nowrap='nowrap'>%s</td>", $row["invoice_descs"]);
+                            printf("<td nowrap='nowrap'>%s</td>", $row["sales_name"]);
+                            printf("<td nowrap='nowrap'>%s</td>", date('d-m-Y', strtotime($row["due_date"])));
+                            printf("<td align='right'>%s</td>", number_format($row["total_amount"], 0));
+                            printf("<td align='right'>%s</td>", number_format($row["paid_amount"], 0));
+                            printf("<td align='right'>%s</td>", number_format($row["balance_amount"], 0));
                             print("</tr>");
                         }
-                        $tDpp+= $row["base_amount"];
-                        $tPpn+= $row["tax_amount"];
-                        $tOtal+= $row["total_amount"];
-                        $tTerbayar+= $row["paid_amount"];
-                        $tSisa+= $row["balance_amount"];
+                        $tDpp += $row["base_amount"];
+                        $tPpn += $row["tax_amount"];
+                        $tOtal += $row["total_amount"];
+                        $tTerbayar += $row["paid_amount"];
+                        $tSisa += $row["balance_amount"];
                     }
-                    if ($JnsLaporan == 2){
+                    if ($JnsLaporan == 2) {
                         if ($sma) {
                             print("</tr>");
                             print("<td colspan='11'>&nbsp;</td>");
                         }
                         printf("<td nowrap='nowrap'>%s</td>", $row['item_code']);
                         printf("<td nowrap='nowrap'>%s</td>", $row['item_descs']);
-                        printf("<td align='right'>%s</td>", number_format($row['qty'], 0));
+                        if (fmod($row['qty'],1) > 0.0) {
+                            printf("<td align='right'>%s</td>", number_format($row['qty'], 1));
+                        }else {
+                            printf("<td align='right'>%s</td>", number_format($row['qty'], 0));
+                        }
                         printf("<td align='right' >%s</td>", number_format($row['price'], 0));
                         printf("<td align='right'>%s</td>", $row['disc_formula']);
                         printf("<td align='right'>%s</td>", number_format($row['disc_amount'], 0));
                         printf("<td align='right'>%s</td>", number_format($row['sub_total'], 0));
                         print("</tr>");
-                        $subTotal+= $row['sub_total'];
+                        $subTotal += $row['sub_total']-$row['disc_amount'];
                     }
                     $ivn = $row["invoice_no"];
                 }
             print("<tr>");
-            print("<td colspan='8' align='right'>Grand Total Invoice</td>");
-            printf("<td align='right'>%s</td>",number_format($tOtal,0));
-            printf("<td align='right'>%s</td>",number_format($tTerbayar,0));
-            printf("<td align='right'>%s</td>",number_format($tSisa,0));
+            print("<td colspan='8' align='right'><b>Total Invoice</b></td>");
+            if ($JnsLaporan == 1) {
+                printf("<td align='right'>%s</td>", number_format($tOtal, 0));
+                printf("<td align='right'>%s</td>", number_format($tTerbayar, 0));
+                printf("<td align='right'>%s</td>", number_format($tSisa, 0));
+            }
             if ($JnsLaporan == 2) {
-                print("<td colspan='6'>&nbsp;</td>");
+                print("<td colspan='3'>&nbsp;</td>");
                 printf("<td align='right'>%s</td>", number_format($subTotal, 0));
             }
             print("</tr>");
@@ -247,7 +256,11 @@
                 printf("<td>%s</td>",$row['item_code']);
                 printf("<td>%s</td>",$row['item_descs']);
                 printf("<td>%s</td>",$row['satuan']);
-                printf("<td align='right'>%s</td>",number_format($row['sum_qty'],0));
+                if (fmod($row['sum_qty'],1) > 0.0) {
+                    printf("<td align='right'>%s</td>", number_format($row['sum_qty'], 1));
+                }else{
+                    printf("<td align='right'>%s</td>",number_format($row['sum_qty'],0));
+                }
                 printf("<td align='right'>%s</td>",number_format($row['sum_total'],0));
                 print("</tr>");
                 $sqty+= $row['sum_qty'];
@@ -262,5 +275,5 @@
         </table>
 <!-- end web report -->
 <?php }} ?>
-</body>
+<!-- </body> -->
 </html>

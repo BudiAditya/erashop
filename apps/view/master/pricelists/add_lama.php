@@ -219,5 +219,5 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
         </table>
     </form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

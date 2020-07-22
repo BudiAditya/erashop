@@ -71,17 +71,17 @@ if ($JnsLaporan < 3) {
             } else {
                 $sma = true;
             }
-            if (!$sma) {
-                $sheet->setCellValue("A$row", $nmr);
-                $sheet->getStyle("A$row")->applyFromArray($center);
-                $sheet->setCellValue("B$row", $rpt["cabang_code"]);
-                $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["rb_date"])));
-                $sheet->setCellValue("D$row", $rpt["rb_no"]);
-                $sheet->setCellValue("E$row", $rpt["supplier_name"]);
-                $sheet->setCellValue("F$row", $rpt["rb_descs"]);
-                $sheet->setCellValue("G$row", $rpt["rb_amount"]);
-                $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
-            }
+            //if (!$sma) {
+            $sheet->setCellValue("A$row", $nmr);
+            $sheet->getStyle("A$row")->applyFromArray($center);
+            $sheet->setCellValue("B$row", $rpt["cabang_code"]);
+            $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["rb_date"])));
+            $sheet->setCellValue("D$row", $rpt["rb_no"]);
+            $sheet->setCellValue("E$row", $rpt["supplier_name"]);
+            $sheet->setCellValue("F$row", $rpt["rb_descs"]);
+            $sheet->setCellValue("G$row", $rpt["rb_amount"]);
+            $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
+            //}
             if ($JnsLaporan == 2) {
                 $sheet->setCellValue("H$row", $rpt['ex_grn_no']);
                 $sheet->setCellValueExplicit("I$row", $rpt['item_code'], PHPExcel_Cell_DataType::TYPE_STRING);

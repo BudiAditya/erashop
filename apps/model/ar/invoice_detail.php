@@ -8,18 +8,19 @@ class InvoiceDetail extends EntityBase {
 	public $ItemDescs;
     public $ItemCode;
     public $ItemId;
-    public $Lqty;
-    public $Sqty;
-	public $Qty;
-	public $Price;
+    public $Lqty = 0;
+    public $Sqty = 0;
+	public $Qty = 0;
+	public $Price = 0;
     public $DiscFormula;
-    public $DiscAmount;
-    public $SubTotal;
+    public $DiscAmount = 0;
+    public $SubTotal = 0;
     public $SatBesar;
     public $SatKecil;
-    public $ItemHpp;
+    public $ItemHpp = 0;
     public $ItemNote;
-    public $IsFree;
+    public $IsFree = 0;
+    public $SatJual;
 	// Helper Variable;
 	public $MarkedForDeletion = false;
 
@@ -41,6 +42,7 @@ class InvoiceDetail extends EntityBase {
         $this->SubTotal = $row["sub_total"];
         $this->SatBesar = $row["bsatbesar"];
         $this->SatKecil = $row["bsatkecil"];
+        $this->SatJual = $row["satjual"];
         $this->ItemHpp = $row["item_hpp"];
         $this->ItemNote = $row["item_note"];
         $this->IsFree = $row["is_free"];
@@ -68,9 +70,9 @@ class InvoiceDetail extends EntityBase {
         return $this;
     }
 
-    public function FindDuplicate($cabId,$invId,$itemId,$itemPrice,$discFormula,$discAmount,$isFree = 0) {
+    public function FindDuplicate($cabId,$invId,$itemId,$itemPrice,$discFormula,$discAmount,$isFree = 0,$satJual) {
         $sql = "SELECT a.*,b.bsatbesar,b.bsatkecil FROM t_ar_invoice_detail AS a Join m_barang AS b On a.item_code = b.bkode";
-        $sql.= " WHERE a.invoice_id = $invId And a.cabang_id = $cabId And a.item_id = $itemId And a.price = $itemPrice And a.disc_formula = $discFormula And a.disc_amount = $discAmount And a.is_free = $isFree;";
+        $sql.= " WHERE a.invoice_id = $invId And a.cabang_id = $cabId And a.item_id = $itemId And a.price = $itemPrice And a.disc_formula = $discFormula And a.disc_amount = $discAmount And a.satjual = '".$satJual."';";
         $this->connector->CommandText = $sql;
         $rs = $this->connector->ExecuteQuery();
         if ($rs == null || $rs->GetNumRows() == 0) {
@@ -114,8 +116,8 @@ class InvoiceDetail extends EntityBase {
 
 	public function Insert() {
 		$this->connector->CommandText =
-"INSERT INTO t_ar_invoice_detail(is_free,invoice_id, cabang_id, invoice_no, item_id, item_code, item_descs, l_qty, s_qty, qty, price, disc_formula, disc_amount, sub_total,item_hpp,item_note)
-VALUES(?is_free,?invoice_id, ?cabang_id, ?invoice_no, ?item_id, ?item_code, ?item_descs, ?l_qty, ?s_qty, ?qty, ?price, ?disc_formula, ?disc_amount, ?sub_total,?item_hpp,?item_note)";
+"INSERT INTO t_ar_invoice_detail(satjual,is_free,invoice_id, cabang_id, invoice_no, item_id, item_code, item_descs, l_qty, s_qty, qty, price, disc_formula, disc_amount, sub_total,item_hpp,item_note)
+VALUES(?satjual,?is_free,?invoice_id, ?cabang_id, ?invoice_no, ?item_id, ?item_code, ?item_descs, ?l_qty, ?s_qty, ?qty, ?price, ?disc_formula, ?disc_amount, ?sub_total,?item_hpp,?item_note)";
 		$this->connector->AddParameter("?invoice_id", $this->InvoiceId);
         $this->connector->AddParameter("?cabang_id", $this->CabangId);
         $this->connector->AddParameter("?invoice_no", $this->InvoiceNo);
@@ -132,6 +134,7 @@ VALUES(?is_free,?invoice_id, ?cabang_id, ?invoice_no, ?item_id, ?item_code, ?ite
         $this->connector->AddParameter("?item_hpp", $this->ItemHpp);
         $this->connector->AddParameter("?item_note", $this->ItemNote);
         $this->connector->AddParameter("?is_free", $this->IsFree);
+        $this->connector->AddParameter("?satjual", $this->SatJual);
 		$rs = $this->connector->ExecuteNonQuery();
         $rsx = null;
         $did = 0;
@@ -170,6 +173,7 @@ VALUES(?is_free,?invoice_id, ?cabang_id, ?invoice_no, ?item_id, ?item_code, ?ite
 	, item_hpp = ?item_hpp
 	, item_note = ?item_note
 	, is_free = ?is_free
+	, satjual = ?satjual
 WHERE id = ?id";
         $this->connector->AddParameter("?invoice_id", $this->InvoiceId);
         $this->connector->AddParameter("?cabang_id", $this->CabangId);
@@ -187,6 +191,7 @@ WHERE id = ?id";
         $this->connector->AddParameter("?item_hpp", $this->ItemHpp);
         $this->connector->AddParameter("?item_note", $this->ItemNote);
         $this->connector->AddParameter("?is_free", $this->IsFree);
+        $this->connector->AddParameter("?satjual", $this->SatJual);
         $this->connector->AddParameter("?id", $id);
         $rs = $this->connector->ExecuteNonQuery();
         if ($rs == 1) {

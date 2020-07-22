@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $purchase Purchase */
 ?>
@@ -563,7 +563,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
     </form>
 </div>
 <div id="ft" style="padding:5px; text-align: center; font-family: verdana; font-size: 9px" >
-    Copyright &copy; 2016  CV. Erasystem Infotama
+    Copyright &copy; 2016 - 2020 <a href='http://rekasys.com'>Rekasys Inc</a>
 </div>
 <!-- Form Add Grn Detail -->
 <div id="dlg" class="easyui-dialog" style="width:1100px;height:200px;padding:5px 5px"
@@ -622,5 +622,5 @@ $bpdf = base_url('public/images/button/').'pdf.png';
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveDetail()" style="width:90px">Simpan</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Batal</a>
 </div>
-</body>
+<!-- </body> -->
 </html>

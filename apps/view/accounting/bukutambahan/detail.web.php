@@ -211,5 +211,5 @@ $haveData = $openingBalance != null;
 <!-- END REGION: LAPORAN-->
 
 
-</body>
+<!-- </body> -->
 </html>

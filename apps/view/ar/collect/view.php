@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $collect Collect */ /** @var $collector Karyawan[] */
 ?>
@@ -150,5 +150,5 @@
         </table>
     </div>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

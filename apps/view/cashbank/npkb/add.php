@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $npkb Npkb */ /** @var $companies Company[] */ /** @var $trxtypes TrxType[] */ /** @var $cabangs Cabang[] */ 
 ?>
@@ -121,5 +121,5 @@
 		</table>
 	</form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

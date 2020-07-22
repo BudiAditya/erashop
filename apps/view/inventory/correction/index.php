@@ -265,5 +265,5 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCorrection()" style="width:90px">Simpan</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Batal</a>
 </div>
-</body>
+<!-- </body> -->
 </html>

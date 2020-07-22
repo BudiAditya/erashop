@@ -11,5 +11,5 @@
 
 <body>
 	<h2>Error Encountered : <?php print($error); ?></h2>
-</body>
+<!-- </body> -->
 </html>

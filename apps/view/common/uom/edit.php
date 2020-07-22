@@ -50,5 +50,5 @@
 		</table>
 	</form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

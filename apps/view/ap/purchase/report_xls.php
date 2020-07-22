@@ -83,22 +83,22 @@ if ($JnsLaporan < 3) {
             } else {
                 $sma = true;
             }
-            if (!$sma) {
-                $sheet->setCellValue("A$row", $nmr);
-                $sheet->getStyle("A$row")->applyFromArray($center);
-                $sheet->setCellValue("B$row", $rpt["cabang_code"]);
-                $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["grn_date"])));
-                $sheet->setCellValue("D$row", $rpt["grn_no"]);
-                $sheet->setCellValue("E$row", $rpt["supplier_name"]);
-                $sheet->setCellValue("F$row", $rpt["grn_descs"]);
-                $sheet->setCellValue("G$row", date('d-m-Y', strtotime($rpt["due_date"])));
-                $sheet->setCellValue("H$row", $rpt["total_amount"]);
-                $sheet->setCellValue("I$row", $rpt["paid_amount"]);
-                $sheet->setCellValue("J$row", $rpt["balance_amount"]);
-                $sheet->getStyle("A$row:J$row")->applyFromArray(array_merge($allBorders));
-            }
+            //if (!$sma) {
+            $sheet->setCellValue("A$row", $nmr);
+            $sheet->getStyle("A$row")->applyFromArray($center);
+            $sheet->setCellValue("B$row", $rpt["cabang_code"]);
+            $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["grn_date"])));
+            $sheet->setCellValue("D$row", $rpt["grn_no"]);
+            $sheet->setCellValue("E$row", $rpt["supplier_name"]);
+            $sheet->setCellValue("F$row", $rpt["grn_descs"]);
+            $sheet->setCellValue("G$row", date('d-m-Y', strtotime($rpt["due_date"])));
+            $sheet->setCellValue("H$row", $rpt["total_amount"]);
+            $sheet->setCellValue("I$row", $rpt["paid_amount"]);
+            $sheet->setCellValue("J$row", $rpt["balance_amount"]);
+            $sheet->getStyle("A$row:J$row")->applyFromArray(array_merge($allBorders));
+            //}
             if ($JnsLaporan == 2) {
-                $sheet->setCellValueExplicit("K$row", $rpt['item_code'],PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("K$row", $rpt['item_code'], PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValue("L$row", $rpt['item_descs']);
                 $sheet->setCellValue("M$row", $rpt['qty']);
                 $sheet->setCellValue("N$row", $rpt['price']);

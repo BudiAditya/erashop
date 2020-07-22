@@ -111,18 +111,18 @@
                     printf('<td>%s</td>',$row["item_code"]);
                     printf('<td>%s</td>',$row["item_name"]);
                     printf('<td>%s</td>',$row["satuan"]);
-                    printf('<td class="right">%s</td>',number_format($row["sAwal"],0));
-                    printf('<td class="right">%s</td>',$row["sBeli"] > 0 ? number_format($row["sBeli"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sAsyin"] > 0 ? number_format($row["sAsyin"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sXin"] > 0 ? number_format($row["sXin"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sRjual"] > 0 ? number_format($row["sRjual"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sJual"] > 0 ? number_format($row["sJual"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sAsyout"] > 0 ? number_format($row["sAsyout"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sXout"] > 0 ? number_format($row["sXout"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sRbeli"] > 0 ? number_format($row["sRbeli"],0) : '');
-                    printf('<td class="right">%s</td>',$row["sKoreksi"] <> 0 ? number_format($row["sKoreksi"],0) : '');
+                    printf('<td class="right">%s</td>',number_format($row["sAwal"],2));
+                    printf('<td class="right">%s</td>',$row["sBeli"] > 0 ? number_format($row["sBeli"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sAsyin"] > 0 ? number_format($row["sAsyin"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sXin"] > 0 ? number_format($row["sXin"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sRjual"] > 0 ? number_format($row["sRjual"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sJual"] > 0 ? number_format($row["sJual"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sAsyout"] > 0 ? number_format($row["sAsyout"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sXout"] > 0 ? number_format($row["sXout"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sRbeli"] > 0 ? number_format($row["sRbeli"],2) : '');
+                    printf('<td class="right">%s</td>',$row["sKoreksi"] <> 0 ? number_format($row["sKoreksi"],2) : '');
                     $sld = ($row["sAwal"] + $row["sBeli"] + $row["sAsyin"] + $row["sXin"] + $row["sRjual"]) - ($row["sJual"] + $row["sAsyout"] + $row["sXout"] + $row["sRbeli"]) + $row["sKoreksi"];
-                    printf('<td class="right">%s</td>',number_format($sld,0));
+                    printf('<td class="right">%s</td>',number_format($sld,2));
                     print('</tr>');
                     $awl+= $row["sAwal"];
                     $mbl+= $row["sBeli"];
@@ -138,22 +138,22 @@
                 }
                 printf('<tr>');
                 printf('<td class="bold right" colspan="4">Total Mutasi</td>');
-                printf('<td class="bold right">%s</td>',number_format($awl,0));
-                printf('<td class="bold right">%s</td>',number_format($mbl,0));
-                printf('<td class="bold right">%s</td>',number_format($ain,0));
-                printf('<td class="bold right">%s</td>',number_format($mxi,0));
-                printf('<td class="bold right">%s</td>',number_format($mrj,0));
-                printf('<td class="bold right">%s</td>',number_format($kjl,0));
-                printf('<td class="bold right">%s</td>',number_format($aot,0));
-                printf('<td class="bold right">%s</td>',number_format($kxo,0));
-                printf('<td class="bold right">%s</td>',number_format($krb,0));
-                printf('<td class="bold right">%s</td>',number_format($kor,0));
-                printf('<td class="bold right">%s</td>',number_format($ssl,0));
+                printf('<td class="bold right">%s</td>',number_format($awl,2));
+                printf('<td class="bold right">%s</td>',number_format($mbl,2));
+                printf('<td class="bold right">%s</td>',number_format($ain,2));
+                printf('<td class="bold right">%s</td>',number_format($mxi,2));
+                printf('<td class="bold right">%s</td>',number_format($mrj,2));
+                printf('<td class="bold right">%s</td>',number_format($kjl,2));
+                printf('<td class="bold right">%s</td>',number_format($aot,2));
+                printf('<td class="bold right">%s</td>',number_format($kxo,2));
+                printf('<td class="bold right">%s</td>',number_format($krb,2));
+                printf('<td class="bold right">%s</td>',number_format($kor,2));
+                printf('<td class="bold right">%s</td>',number_format($ssl,2));
                 printf('</tr>');
             }
             ?>
         </table>
     </form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

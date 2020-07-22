@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
 	<title>ERASHOP - Rekapitulasi Produksi</title>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
@@ -241,5 +241,5 @@
             ?>
         </table>
 <?php }} ?>
-</body>
+<!-- </body> -->
 </html>

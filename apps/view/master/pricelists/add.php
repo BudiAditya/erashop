@@ -226,14 +226,19 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
             <tr>
                 <td class="bold right">Nama Barang</td>
                 <td colspan="4"><input type="text" class="bold" id="ItemDescs" name="ItemDescs" style="width:490px" value="<?php print(htmlspecialchars($setprices->ItemName));?>" disabled/></td>
-                <td class="bold right">Satuan</td>
-                <td><input type="text" class="bold" id="Satuan" name="Satuan" size="5" value="<?php print($setprices->Satuan);?>" readonly/></td>
             </tr>
             <tr>
-                <td class="bold right">Max Discount</td>
-                <td><input class="bold right" type="text" id="MaxDisc" name="MaxDisc" size="3" value="<?php print($setprices->MaxDisc == null ? 0 : $setprices->MaxDisc);?>"/>%</td>
                 <td class="bold right">Harga Beli Rp.</td>
-                <td><input class="bold right" type="text" id="HrgBeli" name="HrgBeli" size="10" value="<?php print($setprices->HrgBeli == null ? 0 : $setprices->HrgBeli);?>"/></td>
+                <td><input class="bold right" type="text" id="HrgBeli" name="HrgBeli" size="10" value="<?php print($setprices->HrgBeli == null ? 0 : $setprices->HrgBeli);?>"/>&nbsp;<sup>(* Per Satuan Besar)</sup></td>
+            </tr>
+            <tr>
+                <td class="bold right">Max Disc Jual</td>
+                <td><input class="bold right" type="text" id="MaxDisc" name="MaxDisc" size="3" value="<?php print($setprices->MaxDisc == null ? 0 : $setprices->MaxDisc);?>"/>%</td>
+                <td class="bold right">Nilai Markup</td>
+                <td class="bold right">Satuan Besar</td>
+                <td><input type="text" class="bold" id="SatBesar" name="SatBesar" size="10" value="<?php print($setprices->SatBesar);?>" readonly/></td>
+                <td class="bold right">Satuan Kecil</td>
+                <td><input type="text" class="bold" id="SatKecil" name="SatKecil" size="10" value="<?php print($setprices->SatKecil);?>" readonly/></td>
             </tr>
             <tr>
                 <td class="bold right">Mark Up1</td>
@@ -241,6 +246,8 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
                 <td>Rp. <input class="bold right" type="text" id="nMarkup1" name="nMarkup1" size="10" value="<?php print($setprices->nMarkup1 == null ? 0 : $setprices->nMarkup1);?>"/></td>
                 <td class="bold right">Harga Jual1 Rp.</td>
                 <td><input class="bold right" type="text" id="HrgJual1" name="HrgJual1" size="10" value="<?php print($setprices->HrgJual1 == null ? 0 : $setprices->HrgJual1);?>"/></td>
+                <td class="bold right">Harga Jual1 Kecil Rp.</td>
+                <td><input class="bold right" type="text" id="HrgJual1k" name="HrgJual1k" size="10" value="<?php print($setprices->HrgJual1k == null ? 0 : $setprices->HrgJual1k);?>"/></td>
             </tr>
             <tr>
                 <td class="bold right">Mark Up2</td>
@@ -248,6 +255,8 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
                 <td>Rp. <input class="bold right" type="text" id="nMarkup2" name="nMarkup2" size="10" value="<?php print($setprices->nMarkup2 == null ? 0 : $setprices->nMarkup2);?>"/></td>
                 <td class="bold right">Harga Jual2 Rp.</td>
                 <td><input class="bold right" type="text" id="HrgJual2" name="HrgJual2" size="10" value="<?php print($setprices->HrgJual2 == null ? 0 : $setprices->HrgJual2);?>"/></td>
+                <td class="bold right">Harga Jual2 Kecil Rp.</td>
+                <td><input class="bold right" type="text" id="HrgJual2k" name="HrgJual2k" size="10" value="<?php print($setprices->HrgJual2k == null ? 0 : $setprices->HrgJual2k);?>"/></td>
             </tr>
             <tr>
                 <td class="bold right">Mark Up3</td>
@@ -255,6 +264,8 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
                 <td>Rp. <input class="bold right" type="text" id="nMarkup3" name="nMarkup3" size="10" value="<?php print($setprices->nMarkup3 == null ? 0 : $setprices->nMarkup3);?>"/></td>
                 <td class="bold right">Harga Jual3 Rp.</td>
                 <td><input class="bold right" type="text" id="HrgJual3" name="HrgJual3" size="10" value="<?php print($setprices->HrgJual3 == null ? 0 : $setprices->HrgJual3);?>"/></td>
+                <td class="bold right">Harga Jual3 Kecil Rp.</td>
+                <td><input class="bold right" type="text" id="HrgJual3k" name="HrgJual3k" size="10" value="<?php print($setprices->HrgJual3k == null ? 0 : $setprices->HrgJual3k);?>"/></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
@@ -266,5 +277,5 @@ $crDate = date(JS_DATE, strtotime(date('Y-m-d')));
         </table>
     </form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

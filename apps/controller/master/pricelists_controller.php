@@ -100,6 +100,9 @@ class PriceListsController extends AppController {
 			$setprices->HrgJual1 = $this->GetPostValue("HrgJual1");
 			$setprices->HrgJual2 = $this->GetPostValue("HrgJual2");
 			$setprices->HrgJual3 = $this->GetPostValue("HrgJual3");
+            $setprices->HrgJual1k = $this->GetPostValue("HrgJual1k");
+            $setprices->HrgJual2k = $this->GetPostValue("HrgJual2k");
+            $setprices->HrgJual3k = $this->GetPostValue("HrgJual3k");
 			//$setprices->HrgJual4 = $this->GetPostValue("HrgJual4");
 			//$setprices->HrgJual5 = $this->GetPostValue("HrgJual5");
 			//$setprices->HrgJual6 = $this->GetPostValue("HrgJual6");
@@ -112,7 +115,7 @@ class PriceListsController extends AppController {
 			//$setprices->Markup4 = $this->GetPostValue("Markup4");
 			//$setprices->Markup5 = $this->GetPostValue("Markup5");
 			//$setprices->Markup6 = $this->GetPostValue("Markup6");
-			$setprices->Satuan = $this->GetPostValue("Satuan");
+			$setprices->Satuan = $this->GetPostValue("SatBesar");
 			if ($this->ValidateData($setprices)) {
 				$setprices->CreatebyId = $this->userUid;
 				$setprices->UpdatebyId = $this->userUid;

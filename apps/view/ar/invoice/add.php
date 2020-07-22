@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $invoice Invoice */ /** @var $sales Karyawan[] */
 $counter = 0;
@@ -25,6 +25,8 @@ $counter = 0;
     <script type="text/javascript" src="<?php print($helper->path("public/js/qz/dependencies/rsvp-3.1.0.min.js")); ?>"></script>
     <script type="text/javascript" src="<?php print($helper->path("public/js/qz/dependencies/sha-256.min.js")); ?>"></script>
     <script type="text/javascript" src="<?php print($helper->path("public/js/qz/qz-tray.js")); ?>"></script>
+    <!-- direct printing -->
+    <script src="<?php print($helper->path("public/js/recta.js"));?>"></script>
 
     <style scoped>
         .f1{
@@ -32,8 +34,10 @@ $counter = 0;
         }
     </style>
     <script type="text/javascript">
+        var printer = new Recta('1122334455', '1811');
         $( function() {
             var userCabId,custId,custLevel,salesId,invoiceId,userCompId,userLevel,allowMinus;
+            var satBesar, satKecil, isiKecil, itemPrice, itemHpp, itemCode;
             userCabId = "<?php print($invoice->CabangId > 0 ? $invoice->CabangId : $userCabId);?>";
             custId = "<?php print($invoice->CustomerId);?>";
             custLevel = "<?php print($invoice->CustLevel > 0 ? $invoice->CustLevel : 0);?>";
@@ -106,7 +110,7 @@ $counter = 0;
                 columns:[[
                     {field:'item_code',title:'Kode',width:80},
                     {field:'item_name',title:'Nama Barang',width:220},
-                    {field:'satuan',title:'Satuan',width:40},
+                    {field:'satkecil',title:'Satuan',width:40},
                     {field:'qty_stock',title:'Stock',width:40,align:'right'}
                 ]],
                 onSelect: function(index,row){
@@ -116,10 +120,25 @@ $counter = 0;
                     console.log(bkode);
                     var bnama = row.item_name;
                     console.log(bnama);
-                    var satuan = row.satuan;
+                    var satuan = row.satbesar;
                     console.log(satuan);
                     var bqstock = row.qty_stock;
                     console.log(bqstock);
+                    var bprice = row.price;
+                    console.log(bprice);
+                    itemCode = bkode;
+                    satBesar = row.satbesar;
+                    satKecil = row.satkecil;
+                    isiKecil = row.isikecil;
+                    //add satuan option
+                    $("#aSatuan").empty();
+                    $("#aSatuan").append('<option value=""></option>');
+                    if (satBesar != '' && satBesar != null) {
+                        $("#aSatuan").append('<option value="'+satBesar+'">'+satBesar+'</option>');
+                    }
+                    if (satKecil != '' && satKecil != null) {
+                        $("#aSatuan").append('<option value="'+satKecil+'">'+satKecil+'</option>');
+                    }
                     $('#aItemId').val(bid);
                     $('#aItemCode').val(bkode);
                     $('#aItemDescs').val(bnama);
@@ -127,7 +146,7 @@ $counter = 0;
                     $('#aQtyStock').val(bqstock);
                     $('#aDiscFormula').val(0);
                     $('#aDiscAmount').val(0);
-                    $('#aPrice').val(0);
+                    $('#aPrice').val(bprice);
                     $('#aItemHpp').val(0);
                     if(bqstock >= 0 || allowMinus == 1){
                         $('#aQty').val(1);
@@ -154,11 +173,23 @@ $counter = 0;
                         if (status == 'success'){
                             var dtx = data.split('|');
                             if (dtx[0] == 'OK'){
+                                satBesar = dtx[6];
+                                satKecil = dtx[7];
+                                isiKecil = dtx[8];
+                                //add satuan option
+                                $("#aSatuan").empty();
+                                $("#aSatuan").append('<option value=""></option>');
+                                if (satBesar != '' && satBesar != null) {
+                                    $("#aSatuan").append('<option value="'+satBesar+'">'+satBesar+'</option>');
+                                }
+                                if (satKecil != '' && satKecil != null) {
+                                    $("#aSatuan").append('<option value="'+satKecil+'">'+satKecil+'</option>');
+                                }
                                 $('#aItemId').val(dtx[1]);
                                 $('#aItemDescs').val(dtx[2]);
                                 $('#aSatuan').val(dtx[3]);
                                 $('#aItemHpp').val(dtx[5]);
-                                $('#aPrice').val(dtx[6]);
+                                $('#aPrice').val(dtx[9]);
                                 $('#aDiscFormula').val(0);
                                 $('#aDiscAmount').val(0);
                                 $('#aQtyStock').val(Number(dtx[4]));
@@ -239,6 +270,10 @@ $counter = 0;
                         }
                     }
                 }
+            });
+
+            $("#aSatuan").change(function(e){
+                getItemPriceByUnit(itemCode,custLevel,this.value,satBesar,satKecil,isiKecil);
             });
 
             $("#aPrice").change(function(e){
@@ -332,22 +367,12 @@ $counter = 0;
             });
 
             $("#bCetak").click(function(){
-                var uip = '<?php print($userIpAdd);?>';
-                var ptp = <?php print($userCabRpm);?>;
                 var printCnt = <?php print($invoice->PrintCount);?>;
-                if (printCnt > 0){
+                if (printCnt > 1){
                     alert('ER - Invoice/Struk sudah pernah di-print!');
                 }else {
-                    if ((uip.substr(0, 3) == '127') || (uip.substr(0, 3) == '::1') && (ptp == 1 || ptp == 4)) {
-                        if (confirm('Cetak Struk Invoice ini?')) {
-                            $.get('<?php print($helper->site_url("ar.invoice/printdirect/").$invoice->Id."/".$userCabRpm."/".$userCabRpn); ?>', function (e) {
-                                alert('OK - Send Data to Printer');
-                            });
-                        }
-                    } else {
-                        if (confirm('Cetak invoice ini?')) {
-                            printDirect()
-                        }
+                    if (confirm('Cetak Struk Invoice ini?')) {
+                        rectaPrint();
                     }
                 }
             });
@@ -394,12 +419,43 @@ $counter = 0;
         function getItemPrice(itemCode,custLevel){
             var url = "<?php print($helper->site_url("ar.invoice/getItemPrice/"));?>"+itemCode+"/"+custLevel;
             $.get(url, function(data, status) {
+                //alert(data);
                 var dtz = data.split('|');
-                $('#aPrice').val(dtz[1]);
+                if (Number($('#aPrice').val()) == 0 || $('#aPrice').val() == null || $('#aPrice').val() == ''){
+                    $('#aPrice').val(dtz[1]);
+                }
                 $('#aItemHpp').val(dtz[0]);
                 hitDetail();
             });
         }
+
+        function getItemPriceByUnit(itemCode,custLevel,unitJual,unitBesar,unitKecil,isiUnit){
+            var iPrice = 0;
+            var kPrice = 0;
+            var iHpp = 0;
+            var url = "<?php print($helper->site_url("ar.invoice/getItemPrice/"));?>"+itemCode+"/"+custLevel;
+            $.get(url, function(data, status) {
+                //alert(data);
+                var dtz = data.split('|');
+                iHpp   = Number(dtz[0]);
+                iPrice = Number(dtz[1]);
+                kPrice = Number(dtz[2]);
+                if (unitJual != unitBesar){
+                    if (unitJual == unitKecil && isiUnit > 0){
+                        iHpp   = Math.round(iHpp/isiUnit,2);
+                        if (kPrice > 0) {
+                            iPrice = kPrice;
+                        }else{
+                            iPrice = Math.round(iPrice / isiUnit, 2);
+                        }
+                    }
+                }
+                $('#aPrice').val(iPrice);
+                $('#aItemHpp').val(iHpp);
+                hitDetail();
+            });
+        }
+
         function newItem(){
             $('#dlg').dialog('open').dialog('setTitle','Tambah Detail Barang yang dijual');
             $('#fm').form('clear');
@@ -506,6 +562,7 @@ $counter = 0;
                                                 aPrice: Number($('#aPrice').val()),
                                                 aDiscFormula: $('#aDiscFormula').val(),
                                                 aDiscAmount: $('#aDiscAmount').val(),
+                                                aSatuan: $('#aSatuan').val(),
                                                 aSubTotal: astt,
                                                 aItemHpp: ahpp,
                                                 aItemNote: aint,
@@ -568,6 +625,7 @@ $counter = 0;
                                         aPrice: Number($('#aPrice').val()),
                                         aDiscFormula: $('#aDiscFormula').val(),
                                         aDiscAmount: $('#aDiscAmount').val(),
+                                        aSatuan: $('#aSatuan').val(),
                                         aSubTotal: astt,
                                         aItemHpp: ahpp,
                                         aItemNote: aint,
@@ -645,23 +703,6 @@ $counter = 0;
                 });
             }
         }
-        function printDirect() {
-            qz.websocket.connect().then(function() {
-                //alert("Not Connected!");
-            });
-            $.get('<?php print($helper->site_url("ar.invoice/printdirect/").$invoice->Id."/".$userCabRpm); ?>', function(ajson, status){
-                var config = qz.configs.create("<?php print($userCabRpn);?>");
-                var data = JSON.parse(ajson);
-                //var datx = ['\x1B' + '\x40','\x1B' + '\x67','\x1B' + '\x47'];  //cetak double-strike
-                //var datx = ['\x1B' + '\x40','\x1B' + '\x67','\x1B' + '\x43' + '\x1E']; //cetak biasa 15 cpi 30 lines
-                var datx = ['\x1B' + '\x40','\x1B' + '\x67']; //cetak biasa 15 cpi
-                for ( var i = 0; i < data.length; i++ ) {
-                    datx.push(data[i]+'\n');
-                }
-                //datx.push('\x0C'); // form feed
-                qz.print(config, datx).catch(function(e) { console.error(e); });
-            });
-        }
 
         function hitDiscFormula(nAmount,dFormula){
             var retVal = 0;
@@ -677,6 +718,65 @@ $counter = 0;
                 }
             }
             return retVal;
+        }
+
+        function rectaPrint() {
+            var urx = "<?php print($helper->site_url("ar/invoice/getStrukData"));?>";
+            var ivi = "<?php print($invoice->Id);?>";
+            var dvalue = {ivid: ivi};
+            $.ajax(
+                {
+                    url : urx,
+                    type: "POST",
+                    data : dvalue,
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        printer.open().then(function () {
+                            $.each(JSON.parse(data), function () {
+                                $.each(this, function (name, value) {
+                                    //console.log(name + '=' + value);
+                                    if (name == 'format'){
+                                        switch(value) {
+                                            case "AC":
+                                                printer.align('center');
+                                                break;
+                                            case "AL":
+                                                printer.align('left');
+                                                break;
+                                            case "AR":
+                                                printer.align('right');
+                                                break;
+                                            case "B1":
+                                                printer.bold(true);
+                                                break;
+                                            case "B0":
+                                                printer.bold(false);
+                                                break;
+                                            case "U1":
+                                                printer.underline(true);
+                                                break;
+                                            case "U0":
+                                                printer.underline(false);
+                                                break;
+                                            default:
+                                                printer.align('left');
+                                                break;
+                                        }
+                                    }else {
+                                        printer.text(value);
+                                    }
+                                });
+                            });
+                            printer.feed(7);
+                            printer.cut();
+                            printer.print();
+                        })
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        alert(textStatus);
+                    }
+                });
         }
     </script>
     <style type="text/css">
@@ -838,8 +938,8 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                         printf('<td>%s</td>', $detail->ItemCode);
                         printf('<td>%s</td>', $detail->ItemDescs);
                         printf('<td>%s</td>', $detail->ItemNote);
-                        printf('<td class="right">%s</td>', number_format($detail->Qty,1));
-                        printf('<td>%s</td>', $detail->SatBesar);
+                        printf('<td class="right">%s</td>', number_format($detail->Qty,2));
+                        printf('<td>%s</td>', $detail->SatJual);
                         printf('<td class="right">%s</td>', number_format($detail->Price,0));
                         printf('<td class="right">%s</td>', $detail->DiscFormula);
                         printf('<td class="right">%s</td>', number_format($detail->DiscAmount,0));
@@ -902,18 +1002,21 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                         <td colspan="8"><b><input type="text" class="bold" id="OtherCosts" name="OtherCosts" size="60" maxlength="150" value="<?php print($invoice->OtherCosts != null ? $invoice->OtherCosts : '-'); ?>"/></b></td>
                         <td><input type="text" class="right bold" style="width: 150px" id="OtherCostsAmount" name="OtherCostsAmount" value="<?php print($invoice->OtherCostsAmount != null ? number_format($invoice->OtherCostsAmount,0) : 0); ?>"/></td>
                         <?php if ($acl->CheckUserAccess("ar.invoice", "print")) { ?>
-                            <td class='center'><?php printf('<img src="%s" id="bCetakPdf" alt="Cetak PDF Invoice" title="Proses cetak PDF invoice" style="cursor: pointer;"/>',$bpdf);?></td>
+                            <td class='center'>
+                                <?php
+                                if ($userCabRpm == 4){
+                                    printf('<img src="%s" id="bCetak" alt="Cetak Invoice" title="Proses cetak invoice" style="cursor: pointer;"/>',$bcetak);
+                                }else {
+                                    printf('<img src="%s" id="bCetakPdf" alt="Cetak PDF Invoice" title="Proses cetak PDF invoice" style="cursor: pointer;"/>', $bpdf);
+                                }
+                                ?>
+                            </td>
                         <?php }else{ ?>
                             <td>&nbsp</td>
                         <?php } ?>
                     </tr>
                     <tr>
-                        <?php if ($acl->CheckUserAccess("ar.invoice", "print")) { ?>
-                            <td class='left'><?php printf('<img src="%s" id="bCetak" alt="Cetak Invoice" title="Proses cetak invoice" style="cursor: pointer;"/>',$bcetak);?></td>
-                        <?php }else{ ?>
-                            <td>&nbsp</td>
-                        <?php } ?>
-                        <td colspan="9" align="right">Grand Total :</td>
+                        <td colspan="10" align="right">Grand Total :</td>
                         <td><input type="text" class="right bold" style="width: 150px;" id="TotalAmount" name="TotalAmount" value="<?php print($invoice->TotalAmount != null ? number_format($invoice->TotalAmount,0) : 0); ?>" readonly/></td>
                         <td class='center'><?php printf('<img src="%s" id="bKembali" alt="Daftar Invoice" title="Kembali ke daftar invoice" style="cursor: pointer;"/>',$bkembali);?></td>
                     </tr>
@@ -923,10 +1026,10 @@ $bpdf = base_url('public/images/button/').'pdf.png';
     </table>
 </div>
 <div id="ft" style="padding:5px; text-align: center; font-family: verdana; font-size: 9px" >
-    Copyright &copy; 2016  CV. Erasystem Infotama
+    Copyright &copy; 2016 - 2020 <a href='http://rekasys.com'>Rekasys Inc</a>
 </div>
 <!-- Form Add/Edit Invoice Detail -->
-<div id="dlg" class="easyui-dialog" style="width:1100px;height:200px;padding:5px 5px"
+<div id="dlg" class="easyui-dialog" style="width:1150px;height:200px;padding:5px 5px"
      closed="true" buttons="#dlg-buttons">
     <form id="fm" method="post" novalidate>
         <table cellpadding="0" cellspacing="0" class="tablePadding tableBorder" style="font-size: 12px;font-family: tahoma">
@@ -965,7 +1068,9 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                     <input class="right" type="text" id="aQty" name="aQty" size="5" value="0"/>
                 </td>
                 <td>
-                    <input type="text" id="aSatuan" name="aSatuan" size="5" value="" disabled/>
+                    <select class="bold" name="aSatuan" id="aSatuan" required>
+                        <option value=""></option>
+                    </select>
                 </td>
                 <td>
                     <input class="right" type="text" id="aPrice" name="aPrice" size="10" value="0"/>
@@ -990,5 +1095,5 @@ $bpdf = base_url('public/images/button/').'pdf.png';
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveDetail()" style="width:90px">Simpan</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Batal</a>
 </div>
-</body>
+<!-- </body> -->
 </html>

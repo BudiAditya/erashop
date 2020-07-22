@@ -144,11 +144,11 @@ class Stock extends EntityBase {
                 `trx_url`  varchar(50) NOT NULL ,
                 `relasi`  varchar(50) NOT NULL ,
                 `price`  int(11) NOT NULL DEFAULT 0,
-                `awal`  int(11) NOT NULL DEFAULT 0,
-                `masuk`  int(11) NOT NULL DEFAULT 0 ,
-                `keluar`  int(11) NOT NULL DEFAULT 0 ,
-                `koreksi`  int(11) NOT NULL DEFAULT 0 ,
-                `saldo`  int(11) NOT NULL DEFAULT 0)';
+                `awal`  decimal(10,2) NOT NULL DEFAULT 0,
+                `masuk`  decimal(10,2) NOT NULL DEFAULT 0 ,
+                `keluar`  decimal(10,2) NOT NULL DEFAULT 0 ,
+                `koreksi`  decimal(10,2) NOT NULL DEFAULT 0 ,
+                `saldo`  decimal(10,2) NOT NULL DEFAULT 0)';
         $this->connector->CommandText = $sqx;
         $rs = $this->connector->ExecuteNonQuery();
         // get saldo awal
@@ -280,31 +280,31 @@ class Stock extends EntityBase {
         // create previous mutasi temp table
         $sqx = 'CREATE TEMPORARY TABLE `tmp_prev` (
                 `item_code`  varchar(50) NOT NULL ,
-                `awal`  int(11) NOT NULL DEFAULT 0,
-                `beli`  int(11) NOT NULL DEFAULT 0,
-                `xin`  int(11) NOT NULL DEFAULT 0,
-                `rjual`  int(11) NOT NULL DEFAULT 0,
-                `asyin`  int(11) NOT NULL DEFAULT 0,
-                `jual`  int(11) NOT NULL DEFAULT 0,
-                `xout`  int(11) NOT NULL DEFAULT 0,
-                `rbeli`  int(11) NOT NULL DEFAULT 0,
-                `asyout`  int(11) NOT NULL DEFAULT 0,
-                `koreksi`  int(11) NOT NULL DEFAULT 0)';
+                `awal`  decimal(10,2) NOT NULL DEFAULT 0,
+                `beli`  decimal(10,2) NOT NULL DEFAULT 0,
+                `xin`  decimal(10,2) NOT NULL DEFAULT 0,
+                `rjual`  decimal(10,2) NOT NULL DEFAULT 0,
+                `asyin`  decimal(10,2) NOT NULL DEFAULT 0,
+                `jual`  decimal(10,2) NOT NULL DEFAULT 0,
+                `xout`  decimal(10,2) NOT NULL DEFAULT 0,
+                `rbeli`  decimal(10,2) NOT NULL DEFAULT 0,
+                `asyout`  decimal(10,2) NOT NULL DEFAULT 0,
+                `koreksi`  decimal(10,2) NOT NULL DEFAULT 0)';
         $this->connector->CommandText = $sqx;
         $rs = $this->connector->ExecuteNonQuery();
         // create request mutasi temp table
         $sqx = 'CREATE TEMPORARY TABLE `tmp_mutasi` (
                 `item_code`  varchar(50) NOT NULL ,
-                `awal`  int(11) NOT NULL DEFAULT 0,
-                `beli`  int(11) NOT NULL DEFAULT 0,
-                `xin`  int(11) NOT NULL DEFAULT 0,
-                `rjual`  int(11) NOT NULL DEFAULT 0,
-                `asyin`  int(11) NOT NULL DEFAULT 0,
-                `jual`  int(11) NOT NULL DEFAULT 0,
-                `xout`  int(11) NOT NULL DEFAULT 0,
-                `rbeli`  int(11) NOT NULL DEFAULT 0,
-                `asyout`  int(11) NOT NULL DEFAULT 0,
-                `koreksi`  int(11) NOT NULL DEFAULT 0)';
+                `awal`  decimal(10,2) NOT NULL DEFAULT 0,
+                `beli`  decimal(10,2) NOT NULL DEFAULT 0,
+                `xin`  decimal(10,2) NOT NULL DEFAULT 0,
+                `rjual`  decimal(10,2) NOT NULL DEFAULT 0,
+                `asyin`  decimal(10,2) NOT NULL DEFAULT 0,
+                `jual`  decimal(10,2) NOT NULL DEFAULT 0,
+                `xout`  decimal(10,2) NOT NULL DEFAULT 0,
+                `rbeli`  decimal(10,2) NOT NULL DEFAULT 0,
+                `asyout`  decimal(10,2) NOT NULL DEFAULT 0,
+                `koreksi`  decimal(10,2) NOT NULL DEFAULT 0)';
         $this->connector->CommandText = $sqx;
         $rs = $this->connector->ExecuteNonQuery();
         // get saldo awal
@@ -512,7 +512,7 @@ class Stock extends EntityBase {
     }
 
     public function Load4Reports($entityId = 0,$cabangId = 0, $jenisBarang = "-", $supplierCode = null){
-        $sql = "Select a.item_code,a.bnama,a.bsatbesar,a.hrg_beli,a.hrg_jual,sum(a.qty_stock) as qty_stock,a.supplier_name";
+        $sql = "Select a.item_code,a.bnama,a.bsatkecil,a.hrg_beli,a.hrg_jual,sum(a.qty_stock) as qty_stock,a.supplier_name";
         $sql.= " From vw_ic_stockcenter as a Where a.item_id > 0";
         if ($entityId > 0){
             $sql.= " And a.entity_id = ".$entityId;

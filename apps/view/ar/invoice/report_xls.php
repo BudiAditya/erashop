@@ -45,23 +45,23 @@ if ($JnsLaporan < 3) {
     $sheet->setCellValue("C$row", "Tanggal");
     $sheet->setCellValue("D$row", "No. Invoice");
     $sheet->setCellValue("E$row", "Customer");
-    $sheet->setCellValue("F$row", "Keterangan");
-    $sheet->setCellValue("G$row", "Salesman");
-    $sheet->setCellValue("H$row", "JTP");
-    $sheet->setCellValue("I$row", "Jumlah");
-    $sheet->setCellValue("J$row", "Terbayar");
-    $sheet->setCellValue("K$row", "Outstanding");
-    if ($JnsLaporan == 2) {
-        $sheet->setCellValue("L$row", 'Kode Barang');
-        $sheet->setCellValue("M$row", 'Nama Barang');
-        $sheet->setCellValue("N$row", 'QTY');
-        $sheet->setCellValue("O$row", 'Harga');
-        $sheet->setCellValue("P$row", 'Disc(%)');
-        $sheet->setCellValue("Q$row", 'Discount');
-        $sheet->setCellValue("R$row", 'Jumlah');
-        $sheet->getStyle("A$row:R$row")->applyFromArray(array_merge($center, $allBorders));
-    }else {
+    if ($JnsLaporan == 1) {
+        $sheet->setCellValue("F$row", "Keterangan");
+        $sheet->setCellValue("G$row", "Salesman");
+        $sheet->setCellValue("H$row", "JTP");
+        $sheet->setCellValue("I$row", "Jumlah");
+        $sheet->setCellValue("J$row", "Terbayar");
+        $sheet->setCellValue("K$row", "Outstanding");
         $sheet->getStyle("A$row:K$row")->applyFromArray(array_merge($center, $allBorders));
+    }else{
+        $sheet->setCellValue("F$row", 'Kode Barang');
+        $sheet->setCellValue("G$row", 'Nama Barang');
+        $sheet->setCellValue("H$row", 'QTY');
+        $sheet->setCellValue("I$row", 'Harga');
+        $sheet->setCellValue("J$row", 'Disc(%)');
+        $sheet->setCellValue("K$row", 'Discount');
+        $sheet->setCellValue("L$row", 'Jumlah');
+        $sheet->getStyle("A$row:L$row")->applyFromArray(array_merge($center, $allBorders));
     }
     $nmr = 0;
     $str = $row;
@@ -79,13 +79,14 @@ if ($JnsLaporan < 3) {
             } else {
                 $sma = true;
             }
-            if (!$sma) {
-                $sheet->setCellValue("A$row", $nmr);
-                $sheet->getStyle("A$row")->applyFromArray($center);
-                $sheet->setCellValue("B$row", $rpt["cabang_code"]);
-                $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["invoice_date"])));
-                $sheet->setCellValue("D$row", $rpt["invoice_no"]);
-                $sheet->setCellValue("E$row", $rpt["customer_name"]);
+            //if (!$sma) {
+            $sheet->setCellValue("A$row", $nmr);
+            $sheet->getStyle("A$row")->applyFromArray($center);
+            $sheet->setCellValue("B$row", $rpt["cabang_code"]);
+            $sheet->setCellValue("C$row", date('d-m-Y', strtotime($rpt["invoice_date"])));
+            $sheet->setCellValue("D$row", $rpt["invoice_no"]);
+            $sheet->setCellValue("E$row", $rpt["customer_name"]);
+            if ($JnsLaporan == 1) {
                 $sheet->setCellValue("F$row", $rpt["invoice_descs"]);
                 $sheet->setCellValue("G$row", $rpt["sales_name"]);
                 $sheet->setCellValue("H$row", date('d-m-Y', strtotime($rpt["due_date"])));
@@ -93,16 +94,15 @@ if ($JnsLaporan < 3) {
                 $sheet->setCellValue("J$row", $rpt["paid_amount"]);
                 $sheet->setCellValue("K$row", $rpt["balance_amount"]);
                 $sheet->getStyle("A$row:K$row")->applyFromArray(array_merge($allBorders));
-            }
-            if ($JnsLaporan == 2) {
-                $sheet->setCellValueExplicit("L$row", $rpt['item_code'],PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValue("M$row", $rpt['item_descs']);
-                $sheet->setCellValue("N$row", $rpt['qty']);
-                $sheet->setCellValue("O$row", $rpt['price']);
-                $sheet->setCellValue("P$row", $rpt['disc_formula']);
-                $sheet->setCellValue("Q$row", $rpt['disc_amount']);
-                $sheet->setCellValue("R$row", $rpt['sub_total']);
-                $sheet->getStyle("L$row:R$row")->applyFromArray(array_merge($allBorders));
+            }else{
+                $sheet->setCellValueExplicit("F$row", $rpt['item_code'], PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("G$row", $rpt['item_descs'], PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValue("H$row", $rpt['qty']);
+                $sheet->setCellValue("I$row", $rpt['price']);
+                $sheet->setCellValue("J$row", $rpt['disc_formula']);
+                $sheet->setCellValue("K$row", $rpt['disc_amount']);
+                $sheet->setCellValue("L$row", $rpt['sub_total']);
+                $sheet->getStyle("A$row:L$row")->applyFromArray(array_merge($allBorders));
             }
             $ivn = $rpt["invoice_no"];
         }
@@ -111,16 +111,16 @@ if ($JnsLaporan < 3) {
         $sheet->setCellValue("A$row", "GRAND TOTAL INVOICE");
         $sheet->mergeCells("A$row:H$row");
         $sheet->getStyle("A$row")->applyFromArray($center);
-        $sheet->setCellValue("I$row", "=SUM(I$str:I$edr)");
-        $sheet->setCellValue("J$row", "=SUM(J$str:J$edr)");
-        $sheet->setCellValue("K$row", "=SUM(K$str:K$edr)");
-        $sheet->setCellValue("R$row", "=SUM(R$str:R$edr)");
-        $sheet->getStyle("I$str:K$row")->applyFromArray($idrFormat);
-        $sheet->getStyle("N$str:R$row")->applyFromArray($idrFormat);
         if ($JnsLaporan == 1) {
+            $sheet->setCellValue("I$row", "=SUM(I$str:I$edr)");
+            $sheet->setCellValue("J$row", "=SUM(J$str:J$edr)");
+            $sheet->setCellValue("K$row", "=SUM(K$str:K$edr)");
             $sheet->getStyle("A$row:K$row")->applyFromArray(array_merge($allBorders));
+            $sheet->getStyle("I$str:K$row")->applyFromArray($idrFormat);
         }else{
-            $sheet->getStyle("A$row:R$row")->applyFromArray(array_merge($allBorders));
+            $sheet->setCellValue("L$row", "=SUM(L$str:L$edr)");
+            $sheet->getStyle("A$row:L$row")->applyFromArray(array_merge($allBorders));
+            $sheet->getStyle("I$str:L$row")->applyFromArray($idrFormat);
         }
         $row++;
     }

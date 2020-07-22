@@ -34,5 +34,5 @@
 		You see this error message because your connector setting for DebugMode is equal to 'true'.<br />
 		If you want to suppress this error message please disable DebugMode in your connector settings
 	</div>
-</body>
+<!-- </body> -->
 </html>

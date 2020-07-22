@@ -31,5 +31,5 @@
 
 <input type="text" id="txt2" name="txt2" />
 
-</body>
+<!-- </body> -->
 </html>

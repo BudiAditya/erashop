@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var array $sortableColumns */
 /** @var int $start */ /** @var int $end */ /** @var int $status */
@@ -174,5 +174,5 @@
 </div>
 <?php } ?>
 
-</body>
+<!-- </body> -->
 </html>

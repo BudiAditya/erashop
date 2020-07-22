@@ -346,7 +346,7 @@ class Invoice extends EntityBase {
         $this->connector->AddParameter("?sales_id", $this->SalesId);
 		$this->connector->AddParameter("?invoice_descs", $this->InvoiceDescs);
         $this->connector->AddParameter("?ex_so_no", $this->ExSoNo);
-        $this->connector->AddParameter("?base_amount", $this->BaseAmount);
+        $this->connector->AddParameter("?base_amount", str_replace(",","", $this->BaseAmount));
         $this->connector->AddParameter("?disc1_pct", $this->Disc1Pct);
         $this->connector->AddParameter("?disc1_amount", $this->Disc1Amount);
         $this->connector->AddParameter("?disc2_pct", $this->Disc2Pct);
@@ -405,7 +405,7 @@ WHERE id = ?id";
         $this->connector->AddParameter("?sales_id", $this->SalesId);
         $this->connector->AddParameter("?invoice_descs", $this->InvoiceDescs);
         $this->connector->AddParameter("?ex_so_no", $this->ExSoNo);
-        $this->connector->AddParameter("?base_amount", $this->BaseAmount);
+        $this->connector->AddParameter("?base_amount", str_replace(",","", $this->BaseAmount));
         $this->connector->AddParameter("?disc1_pct", $this->Disc1Pct);
         $this->connector->AddParameter("?disc1_amount", $this->Disc1Amount);
         $this->connector->AddParameter("?disc2_pct", $this->Disc2Pct);

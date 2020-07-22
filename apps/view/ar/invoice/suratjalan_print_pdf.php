@@ -68,7 +68,7 @@ $qJenis = 0;
 $qTotal = 0;
 foreach($invoice->Details as $idx => $detail) {
 	$pdf->Ln(5);
-	$pdf->Cell(22,5,$detail->Qty.' '.strtolower($detail->SatBesar).' ',0,0,"R");
+	$pdf->Cell(22,5,$detail->Qty.' '.strtolower($detail->SatJual).' ',0,0,"R");
 	$pdf->Cell(100,5,$detail->ItemCode.' - '.$detail->ItemDescs,0,0,"L");
 	$qJenis++;
 	$qTotal+= $detail->Qty;

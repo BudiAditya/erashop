@@ -65,6 +65,6 @@
 
 <?php //include(VIEW . "footer.php"); ?>
 
-</body>
+<!-- </body> -->
 
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <?php
 /** @var $cbtrx CbTrx */ /** @var $accounts CoaDetail[] */ /** @var $companies Company[] */ /** @var $trxtypes TrxType[] */ /** @var $cabangs Cabang[] */ /** @var $coabanks CoaDetail[] */
 /** @var $contacts Contacts[] */
@@ -161,5 +161,5 @@
 		</table>
 	</form>
 </fieldset>
-</body>
+<!-- </body> -->
 </html>

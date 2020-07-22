@@ -7,7 +7,7 @@ class UseraclController extends AppController {
 		$this->userCabangId = $this->persistence->LoadState("cabang_id");
 	}
 
-	public function add($uid,$cbi) {
+	public function add($uid = 0,$cbi = 0) {
 		require_once(MODEL . "master/cabang.php");
 		$loader = null;
 		$skema = null;
@@ -93,7 +93,7 @@ class UseraclController extends AppController {
 	}
 
 
-	public function copy($uid = null) {
+	public function copy($uid = 0) {
 		$srcUid = null;
 		$cbi = 0;
 		if (count($this->postData) > 0) {

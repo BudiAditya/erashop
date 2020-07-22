@@ -401,9 +401,10 @@ class InvoiceController extends AppController {
             $invdetail->ItemHpp = $this->GetPostValue("aItemHpp");
             $invdetail->ItemNote = $this->GetPostValue("aItemNote");
             $invdetail->IsFree = $this->GetPostValue("aIsFree");
+            $invdetail->SatJual = $this->GetPostValue("aSatuan");
             // periksa apa sudah ada item dengan harga yang sama, kalo ada gabungkan saja
             $invdetail_exists = new InvoiceDetail();
-            $invdetail_exists = $invdetail_exists->FindDuplicate($invdetail->CabangId,$invdetail->InvoiceId,$invdetail->ItemId,$invdetail->Price,$invdetail->DiscFormula,$invdetail->DiscAmount,$invdetail->IsFree);
+            $invdetail_exists = $invdetail_exists->FindDuplicate($invdetail->CabangId,$invdetail->InvoiceId,$invdetail->ItemId,$invdetail->Price,$invdetail->DiscFormula,$invdetail->DiscAmount,$invdetail->IsFree,$invdetail->SatJual);
             if ($invdetail_exists != null){
                 // proses penggabungan disini
                 /** @var $invdetail_exists InvoiceDetail */
@@ -789,7 +790,7 @@ class InvoiceController extends AppController {
                 $qtotal = 0;
                 $qjenis = 0;
                 foreach ($invoice->Details as $idx => $detail) {
-                    $tx1 = number_format($detail->Qty,1) . ' ' . left($detail->SatBesar, 3);
+                    $tx1 = number_format($detail->Qty,1) . ' ' . left($detail->SatJual, 3);
                     $tx1 = '|' . str_repeat(' ', 11 - strlen($tx1)) . $tx1 . '| ';
                     $tx2 = left($detail->ItemCode . str_repeat(' ', 13 - strlen($detail->ItemCode)) . str_replace('  ', ' ', $detail->ItemDescs), 65);
                     $tx2 = $tx2 . str_repeat(' ', 65 - strlen($tx2)) . '|';
@@ -883,7 +884,7 @@ class InvoiceController extends AppController {
                     $tx2 = left($detail->ItemCode . str_repeat(' ', 16 - strlen($detail->ItemCode)) . $detail->ItemDescs, 58);
                     $tx2 = $tx2.str_repeat(' ',58 - strlen($tx2));
                     $tx3 = number_format($detail->Qty,1);
-                    $tx3 = str_repeat(' ',7-strlen($tx3)).$tx3.' '.left($detail->SatBesar,3);
+                    $tx3 = str_repeat(' ',7-strlen($tx3)).$tx3.' '.left($detail->SatJual,3);
                     $tx4 = number_format($detail->Price,0);
                     $tx4 = str_repeat(' ',15-strlen($tx4)).$tx4;
                     $tx5 = $detail->DiscFormula;
@@ -996,7 +997,7 @@ class InvoiceController extends AppController {
                         $tx4 = 'Free/Bonus';
                     }
                     $tx4 = str_repeat(' ',11-strlen($tx4)).$tx4;
-                    $text.= left($detail->ItemDescs.' ('.trim(left($detail->SatBesar,3)).')',40)."\n";
+                    $text.= left($detail->ItemDescs.' ('.trim(left($detail->SatJual,3)).')',40)."\n";
                     $text.= $tx1.$tx2.$tx3.$tx4."\n";
                     if ($detail->DiscAmount > 0){
                         $tx1 = '-'.$detail->DiscFormula.'% ('.number_format($detail->DiscAmount,0).')';
@@ -1099,7 +1100,7 @@ class InvoiceController extends AppController {
                         $tx4 = 'Free/Bonus';
                     }
                     $tx4 = str_repeat(' ',11-strlen($tx4)).$tx4;
-                    $text.= left($detail->ItemDescs.' ('.trim(left($detail->SatBesar,3)).')',40)."\n";
+                    $text.= left($detail->ItemDescs.' ('.trim(left($detail->SatJual,3)).')',40)."\n";
                     $text.= $tx1.$tx2.$tx3.$tx4."\n";
                     if ($detail->DiscAmount > 0){
                         $tx1 = '-'.$detail->DiscFormula.'% ('.number_format($detail->DiscAmount,0).')';
@@ -1193,7 +1194,7 @@ class InvoiceController extends AppController {
             $setprice = $setprice->FindByKode($cabangId,$bkode);
             $items = null;
             if ($setprice != null){
-                $ret = "OK|".$setprice->ItemId.'|'.$setprice->ItemName.'|'.$setprice->Satuan.'|'.$setprice->QtyStock.'|'.$setprice->HrgBeli;
+                $ret = "OK|".$setprice->ItemId.'|'.$setprice->ItemName.'|'.$setprice->Satuan.'|'.$setprice->QtyStock.'|'.$setprice->HrgBeli.'|'.$setprice->SatBesar.'|'.$setprice->SatKecil.'|'.$setprice->IsiKecil;
                 if ($level == -1 && $setprice->HrgBeli > 0){
                     $ret.= '|'.$setprice->HrgBeli;
                 }elseif($level == 1 && $setprice->HrgJual2 > 0){
@@ -1238,7 +1239,7 @@ class InvoiceController extends AppController {
     public function getItemPrice($itemCode,$level = 0){
         require_once(MODEL . "master/setprice.php");
         $price = new SetPrice();
-	$price = $price->GetItemPrice($this->userCabangId, $itemCode,$level);
+	    $price = $price->GetItemPrice($this->userCabangId, $itemCode,$level);
         print($price);
     }
 
@@ -1303,6 +1304,168 @@ class InvoiceController extends AppController {
         $this->Set("userCabCode",$cabCode);
         $this->Set("userCabName",$cabName);
         $this->Set("userLevel",$this->userLevel);
+    }
+
+    public function printerCounter($invId){
+        $invoice = new Invoice();
+        $invoice->UpdatePrintCounter($invId,AclManager::GetInstance()->GetCurrentUser()->Id);
+    }
+
+    public function getStrukData(){
+        $ivid    = $_POST["ivid"];
+        $invoice = new Invoice();
+        $sale = $invoice->FindById($ivid);
+        $data = array();
+        $i = 0;
+        if ($sale != null){
+            $data[$i]['format'] = 'AC';
+            $data[$i]['text'] = '';
+            $i++;
+            $data[$i]['format'] = 'B1';
+            $data[$i]['text'] = $sale->CabangCode;
+            $i++;
+            $data[$i]['format'] = 'B0';
+            $data[$i]['text'] = $sale->OutletName;
+            $i++;
+            $data[$i]['format'] = 'AC';
+            $data[$i]['text'] = 'STRUK PENJUALAN';
+            $i++;
+            $data[$i]['format'] = 'AL';
+            //1234567890123456789012345678901234567890
+            $data[$i]['text'] = '----------------------------------------';
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text']   = '#'.$sale->InvoiceNo.'  DATE: '.$sale->FormatInvoiceDate(JS_DATE);
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text']   = 'CST: '.left($sale->CustomerName.' ('.$sale->CustomerCode.')',31);
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text']   = '----------------------------------------';
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text']   = 'Nama Barang      Qty    Harga     Jumlah';
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text']   = '----------------------------------------';
+            $saledetails = $sale->LoadDetails();
+            $tx1 = null;
+            $txt = null;
+            $qtotal = 0;
+            $qjenis = 0;
+            foreach ($saledetails as $idx => $detail){
+                $tx1 = left($detail->ItemCode . str_repeat(' ', 16 - strlen($detail->ItemCode)), 16);
+                $tx1 = $tx1.str_repeat(' ',16 - strlen($tx1));
+                if (fmod($detail->Qty,1) > 0.0) {
+                    $tx2 = number_format($detail->Qty, 1, ',', '');
+                }else{
+                    $tx2 = number_format($detail->Qty, 0, ',', '');
+                }
+                $tx2 = str_repeat(' ',4-strlen($tx2)).$tx2;
+                $tx3 = number_format($detail->Price,0);
+                $tx3 = str_repeat(' ',9-strlen($tx3)).$tx3;
+                if ($detail->IsFree == 0){
+                    $tx4 = number_format(round($detail->Qty*$detail->Price,0),0);
+                }else{
+                    $tx4 = 'Free/Bonus';
+                }
+                $tx4 = str_repeat(' ',11-strlen($tx4)).$tx4;
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text']   = left($detail->ItemDescs.' ('.trim(left($detail->SatJual,3)).')',40);
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text']   = $tx1.$tx2.$tx3.$tx4;
+                if ($detail->DiscAmount > 0){
+                    $tx1 = '-'.$detail->DiscFormula.'% ('.number_format($detail->DiscAmount,0).')';
+                    $i++;
+                    $data[$i]['format'] = 'AL';
+                    $data[$i]['text']   = str_repeat(' ',40-strlen($tx1)).$tx1;
+                }
+                $qjenis++;
+                $qtotal += $detail->Qty;
+            }
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = '----------------------------------------';
+            $tx1 = $qtotal.' item(s)';
+            $tx1 = $tx1.str_repeat(' ',18-strlen($tx1));
+            $tx2 = 'Sub Total '.number_format($sale->BaseAmount,0);
+            $tx2 = str_repeat(' ',22-strlen($tx2)).$tx2;
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = $tx1.$tx2;
+            if ($sale->Disc1Amount > 0){
+                $tx1 = 'Discount '.$sale->Disc1Pct.'% = '.number_format($sale->Disc1Amount,0).'-';
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text'] = str_repeat(' ',40-strlen($tx1)).$tx1;
+            }
+            if ($sale->TaxAmount > 0){
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text'] = '----------------------------------------';
+                $tx1 = 'DPP '.number_format($sale->BaseAmount - $sale->Disc1Amount,0).'+';
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text'] = str_repeat(' ',40-strlen($tx1)).$tx1;
+                $tx1 = 'PPN '.$sale->TaxPct.'% = '.number_format($sale->TaxAmount,0).'+';
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text'] = str_repeat(' ',40-strlen($tx1)).$tx1;
+            }
+            if ($sale->OtherCostsAmount > 0){
+                if (strlen($sale->OtherCosts) < 5){
+                    $tx1 = 'Biaya Lain-lain '.number_format($sale->OtherCostsAmount,0).'+';
+                }else{
+                    $tx1 = left($sale->OtherCosts,29).' '.number_format($sale->OtherCostsAmount,0).'+';
+                }
+                $i++;
+                $data[$i]['format'] = 'AL';
+                $data[$i]['text'] = str_repeat(' ',40-strlen($tx1)).$tx1;
+            }
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = '----------------------------------------';
+            if ($sale->PaymentType == 1){
+                $tx1 = '- Kredit '.$sale->CreditTerms.' hari';
+            }else{
+                $tx1 = '- Tunai';
+            }
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = $tx1.str_repeat(' ',40-strlen($tx1.$tx2)).$tx2;
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = '----------------------------------------';
+            $tx1 = "*".strtoupper($sale->AdminName)."*";
+            $tx2 = date("Y-m-d h:i:s");
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = $tx1.str_repeat(' ',40-strlen($tx1.$tx2)).$tx2;
+            $i++;
+            $data[$i]['format'] = 'AL';
+            $data[$i]['text'] = '';
+            $i++;
+            $data[$i]['format'] = 'AC';
+            $data[$i]['text'] = 'BARANG YANG SUDAH DIBELI TIDAK BOLEH';
+            $i++;
+            $data[$i]['format'] = 'AC';
+            $data[$i]['text'] = 'DITUKAR/DIKEMBALIKAN';
+            $i++;
+            $data[$i]['format'] = 'AC';
+            $data[$i]['text'] = 'TERIMA KASIH ATAS KUNJUNGAN ANDA';
+        }
+        print json_encode($data);
+    }
+
+    public function toExcel(){
+        header('Content-Type: application/vnd.ms-excel');
+
+        header('Content-disposition: attachment; filename=profit.xls');
+
+        echo $_GET["data"];
+
     }
 }
 

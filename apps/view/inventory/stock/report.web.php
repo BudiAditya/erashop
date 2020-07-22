@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
 	<title>ERASHOP - Rekapitulasi Stock Barang</title>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
@@ -175,8 +175,8 @@
                 printf("<td>%s</td>",$nmr);
                 printf("<td nowrap='nowrap'>%s</td>",$row["item_code"]);
                 printf("<td nowrap='nowrap'>%s</td>",$row["bnama"]);
-                printf("<td nowrap='nowrap'>%s</td>",$row["bsatbesar"]);
-                printf("<td align='right'>%s</td>",number_format($row["qty_stock"],0));
+                printf("<td nowrap='nowrap'>%s</td>",$row["bsatkecil"]);
+                printf("<td align='right'>%s</td>",number_format($row["qty_stock"],2));
                 if ($userTypeHarga == 1) {
                     printf("<td align='right'>%s</td>", number_format($row["hrg_beli"], 0));
                     printf("<td align='right'>%s</td>", number_format(round($row["qty_stock"] * $row["hrg_beli"], 0), 0));
@@ -203,5 +203,5 @@
     </table>
 <!-- end web report -->
 <?php } ?>
-</body>
+<!-- </body> -->
 </html>
