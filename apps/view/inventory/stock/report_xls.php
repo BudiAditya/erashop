@@ -41,12 +41,31 @@ $sheet->setCellValue("D$row","Satuan");
 $sheet->setCellValue("E$row","Qty Stock");
 if ($userTypeHarga == 1){
     $sheet->setCellValue("F$row","Harga Beli");
-}else{
+    $sheet->setCellValue("G$row","Nilai Stock");
+    if ($userSupplierCode <> null) {
+        $sheet->setCellValue("H$row", "Supplier");
+        $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($center, $allBorders));
+    }else{
+        $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($center, $allBorders));
+    }
+}elseif ($userTypeHarga == 2){
     $sheet->setCellValue("F$row","Harga Jual");
+    $sheet->setCellValue("G$row","Nilai Stock");
+    if ($userSupplierCode <> null) {
+        $sheet->setCellValue("H$row", "Supplier");
+        $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($center, $allBorders));
+    }else{
+        $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($center, $allBorders));
+    }
+}else{
+    if ($userSupplierCode <> null) {
+        $sheet->setCellValue("F$row", "Supplier");
+        $sheet->getStyle("A$row:F$row")->applyFromArray(array_merge($center, $allBorders));
+    }else{
+        $sheet->getStyle("A$row:E$row")->applyFromArray(array_merge($center, $allBorders));
+    }
 }
-$sheet->setCellValue("G$row","Nilai Stock");
-$sheet->setCellValue("H$row","Supplier");
-$sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($center, $allBorders));
+
 $nmr = 0;
 $str = $row;
 if ($reports != null){
@@ -55,34 +74,54 @@ if ($reports != null){
         $nmr++;
         $sheet->setCellValue("A$row",$nmr);
         $sheet->getStyle("A$row")->applyFromArray($center);
-        $sheet->setCellValue("B$row",$rpt["item_code"]);
+        $sheet->setCellValueExplicit("B$row",$rpt["item_code"],PHPExcel_Cell_DataType::TYPE_STRING);
         $sheet->setCellValue("C$row",$rpt["bnama"]);
-        $sheet->setCellValue("D$row",$rpt["bsatbesar"]);
+        $sheet->setCellValue("D$row",$rpt["bsatkecil"]);
         $sheet->setCellValue("E$row",$rpt["qty_stock"]);
         if ($userTypeHarga == 1){
             $sheet->setCellValue("F$row",$rpt["hrg_beli"]);
-        }else{
+            $sheet->setCellValue("G$row","=Round(E$row*F$row,0)");
+            if ($userSupplierCode <> null) {
+                $sheet->setCellValue("H$row", $rpt["supplier_name"]);
+                $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($allBorders));
+            }else{
+                $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
+            }
+        }elseif ($userTypeHarga == 2){
             $sheet->setCellValue("F$row",$rpt["hrg_jual"]);
+            $sheet->setCellValue("G$row","=Round(E$row*F$row,0)");
+            if ($userSupplierCode <> null) {
+                $sheet->setCellValue("H$row", $rpt["supplier_name"]);
+                $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($allBorders));
+            }else{
+                $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
+            }
+        }else{
+            $sheet->getStyle("A$row:E$row")->applyFromArray(array_merge($allBorders));
         }
-        $sheet->setCellValue("G$row","=Round(E$row*F$row,0)");
-        $sheet->setCellValue("H$row",$rpt["supplier_name"]);
-        $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($allBorders));
     }
-    $edr = $row;
-    $row++;
-    $sheet->setCellValue("A$row","TOTAL NILAI STOCK");
-    $sheet->mergeCells("A$row:F$row");
-    $sheet->getStyle("A$row")->applyFromArray($center);
-    $sheet->setCellValue("G$row","=SUM(G$str:G$edr)");
-    $sheet->getStyle("E$str:G$row")->applyFromArray($idrFormat);
-    $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($allBorders));
-    $row++;
+    if ($userTypeHarga > 0) {
+        $edr = $row;
+        $row++;
+        $sheet->setCellValue("A$row", "TOTAL NILAI STOCK");
+        $sheet->mergeCells("A$row:F$row");
+        $sheet->getStyle("A$row")->applyFromArray($center);
+        $sheet->setCellValue("G$row", "=SUM(G$str:G$edr)");
+        $sheet->getStyle("E$str:G$row")->applyFromArray($idrFormat);
+        if ($userSupplierCode <> null) {
+            $sheet->getStyle("A$row:H$row")->applyFromArray(array_merge($allBorders));
+        }else{
+            $sheet->getStyle("A$row:G$row")->applyFromArray(array_merge($allBorders));
+        }
+        $row++;
+    }
 }
 // Flush to client
 
 foreach ($headers as $header) {
     header($header);
 }
+
 // Hack agar client menutup loading dialog box... (Ada JS yang checking cookie ini pada common.js)
 $writer->save("php://output");
 

@@ -252,7 +252,7 @@ class StockController extends AppController {
         }else{
             $sJenisBarang = "-";
             $sSupplierCode = null;
-            $sTypeHarga = 1;
+            $sTypeHarga = 0;
             $sOutput = 0;
             $reports = null;
         }

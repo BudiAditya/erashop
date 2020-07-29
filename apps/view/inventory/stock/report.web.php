@@ -114,6 +114,7 @@
             <td><input class="easyui-combogrid" id="SupplierCode" name="SupplierCode" value="<?php print($userSupplierCode);?>" style="width: 250px"/></td>
             <td>
                 <select id="TypeHarga" name="TypeHarga" required>
+                    <option value="0" <?php print($userTypeHarga == 0 ? 'selected="selected"' : '');?>>Tanpa Harga</option>
                     <option value="1" <?php print($userTypeHarga == 1 ? 'selected="selected"' : '');?>>Harga Beli/HPP</option>
                     <option value="2" <?php print($userTypeHarga == 2 ? 'selected="selected"' : '');?>>Harga Jual</option>
                 </select>
@@ -155,12 +156,18 @@
             <th>Qty Stock</th>
             <?php
             if($userTypeHarga == 1){
-                print('<th>Harga Beli</th>');
-            }else{
-                print('<th>Harga Jual</th>');
+                print('
+                    <th>Harga Beli</th>
+                    <th>Nilai Stock</th>
+                    ');
+            }elseif ($userTypeHarga == 2){
+                print('
+                       <th>Harga Jual</th>
+                       <th>Nilai Stock</th>
+                       ');
             }
             ?>
-            <th>Nilai Stock</th>
+
             <?php
             if ($userSupplierCode <> null){
                 print('<th>Supplier</th>');
@@ -181,7 +188,7 @@
                     printf("<td align='right'>%s</td>", number_format($row["hrg_beli"], 0));
                     printf("<td align='right'>%s</td>", number_format(round($row["qty_stock"] * $row["hrg_beli"], 0), 0));
                     $tOtal+= round($row["qty_stock"] * $row["hrg_beli"],0);
-                }else{
+                }elseif ($userTypeHarga == 2){
                     printf("<td align='right'>%s</td>", number_format($row["hrg_jual"], 0));
                     printf("<td align='right'>%s</td>", number_format(round($row["qty_stock"] * $row["hrg_jual"], 0), 0));
                     $tOtal+= round($row["qty_stock"] * $row["hrg_jual"],0);
@@ -192,13 +199,15 @@
                 print("</tr>");
                 $nmr++;
             }
-        print("<tr>");
-        print("<td colspan='6' align='right'>Total Nilai Stock&nbsp;</td>");
-        printf("<td align='right'>%s</td>",number_format($tOtal,0));
-        if ($userSupplierCode <> null){
-            print('<td>&nbsp</td>');
-        }
-        print("</tr>");
+            if ($userTypeHarga > 0) {
+                print("<tr>");
+                print("<td colspan='6' align='right'>Total Nilai Stock&nbsp;</td>");
+                printf("<td align='right'>%s</td>", number_format($tOtal, 0));
+                if ($userSupplierCode <> null) {
+                    print('<td>&nbsp</td>');
+                }
+                print("</tr>");
+            }
         ?>
     </table>
 <!-- end web report -->
