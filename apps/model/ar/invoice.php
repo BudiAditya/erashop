@@ -643,6 +643,131 @@ On a.id = b.invoice_id Set a.base_amount = b.sumPrice, a.disc1_amount = if(a.dis
         $rs = $this->connector->ExecuteQuery();
         return $rs;
     }
+
+    public function GetInvoiceSumByYear($tahun,$cabId){
+        $query = "SELECT COALESCE(SUM(CASE WHEN month(a.invoice_date) = 1 THEN a.total_amount ELSE 0 END), 0) January
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 2 THEN a.total_amount ELSE 0 END), 0) February
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 3 THEN a.total_amount ELSE 0 END), 0) March
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 4 THEN a.total_amount ELSE 0 END), 0) April
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 5 THEN a.total_amount ELSE 0 END), 0) May
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 6 THEN a.total_amount ELSE 0 END), 0) June
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 7 THEN a.total_amount ELSE 0 END), 0) July
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 8 THEN a.total_amount ELSE 0 END), 0) August
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 9 THEN a.total_amount ELSE 0 END), 0) September
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 10 THEN a.total_amount ELSE 0 END), 0) October
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 11 THEN a.total_amount ELSE 0 END), 0) November
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 12 THEN a.total_amount ELSE 0 END), 0) December
+			    FROM vw_ar_invoice_master a Where year(a.invoice_date) = $tahun And a.cabang_id = $cabId And a.invoice_status <> 3 And a.is_deleted = 0";
+        $this->connector->CommandText = $query;
+        $rs = $this->connector->ExecuteQuery();
+        $row = $rs->FetchAssoc();
+        $data = $row["January"];
+        $data.= ",".$row["February"];
+        $data.= ",".$row["March"];
+        $data.= ",".$row["April"];
+        $data.= ",".$row["May"];
+        $data.= ",".$row["June"];
+        $data.= ",".$row["July"];
+        $data.= ",".$row["August"];
+        $data.= ",".$row["September"];
+        $data.= ",".$row["October"];
+        $data.= ",".$row["November"];
+        $data.= ",".$row["December"];
+        return $data;
+    }
+
+    public function GetDataInvoiceSumByMonth($tahun,$cabId){
+        $query = "SELECT COALESCE(SUM(CASE WHEN month(a.invoice_date) = 1 THEN a.total_amount ELSE 0 END), 0) January
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 2 THEN a.total_amount ELSE 0 END), 0) February
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 3 THEN a.total_amount ELSE 0 END), 0) March
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 4 THEN a.total_amount ELSE 0 END), 0) April
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 5 THEN a.total_amount ELSE 0 END), 0) May
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 6 THEN a.total_amount ELSE 0 END), 0) June
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 7 THEN a.total_amount ELSE 0 END), 0) July
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 8 THEN a.total_amount ELSE 0 END), 0) August
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 9 THEN a.total_amount ELSE 0 END), 0) September
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 10 THEN a.total_amount ELSE 0 END), 0) October
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 11 THEN a.total_amount ELSE 0 END), 0) November
+				,COALESCE(SUM(CASE WHEN month(a.invoice_date) = 12 THEN a.total_amount ELSE 0 END), 0) December
+			    FROM vw_ar_invoice_master a Where year(a.invoice_date) = $tahun And a.cabang_id = $cabId And a.invoice_status <> 3 And a.is_deleted = 0";
+        $this->connector->CommandText = $query;
+        $rs = $this->connector->ExecuteQuery();
+        return $rs->FetchAssoc();
+    }
+
+    public function GetReceiptSumByYear($tahun, $cabId){
+        $query = "SELECT COALESCE(SUM(CASE WHEN month(a.receipt_date) = 1 THEN a.receipt_amount ELSE 0 END), 0) January
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 2 THEN a.receipt_amount ELSE 0 END), 0) February
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 3 THEN a.receipt_amount ELSE 0 END), 0) March
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 4 THEN a.receipt_amount ELSE 0 END), 0) April
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 5 THEN a.receipt_amount ELSE 0 END), 0) May
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 6 THEN a.receipt_amount ELSE 0 END), 0) June
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 7 THEN a.receipt_amount ELSE 0 END), 0) July
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 8 THEN a.receipt_amount ELSE 0 END), 0) August
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 9 THEN a.receipt_amount ELSE 0 END), 0) September
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 10 THEN a.receipt_amount ELSE 0 END), 0) October
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 11 THEN a.receipt_amount ELSE 0 END), 0) November
+				,COALESCE(SUM(CASE WHEN month(a.receipt_date) = 12 THEN a.receipt_amount ELSE 0 END), 0) December
+			    FROM vw_ar_receipt_master a Where year(a.receipt_date) = $tahun And a.cabang_id = $cabId And a.receipt_status <> 3 And a.is_deleted = 0";
+        $this->connector->CommandText = $query;
+        $rs = $this->connector->ExecuteQuery();
+        $row = $rs->FetchAssoc();
+        $data = $row["January"];
+        $data.= ",".$row["February"];
+        $data.= ",".$row["March"];
+        $data.= ",".$row["April"];
+        $data.= ",".$row["May"];
+        $data.= ",".$row["June"];
+        $data.= ",".$row["July"];
+        $data.= ",".$row["August"];
+        $data.= ",".$row["September"];
+        $data.= ",".$row["October"];
+        $data.= ",".$row["November"];
+        $data.= ",".$row["December"];
+        return $data;
+    }
+
+    public function LoadTop10Customer($cabangId,$tahun) {
+        $sql = "Select a.customer_code,a.customer_name, a.nilai as omset From vw_ar_omset_customer_by_year a Where a.tahun = $tahun And a.cabang_id = $cabangId Order By a.nilai Desc Limit 0,10;";
+        $this->connector->CommandText = $sql;
+        $rs = $this->connector->ExecuteQuery();
+        return $rs;
+    }
+
+
+    public function GetJSonTop10Customer($cabangId,$tahun){
+        $query = "Select a.customer_name as kode, a.nilai,zfc_random_color() as warna From vw_ar_omset_customer_by_year a Where a.tahun = $tahun And a.cabang_id = $cabangId Order By a.nilai Desc Limit 0,10;";
+        $this->connector->CommandText = $query;
+        $rs = $this->connector->ExecuteQuery();
+        $result = array();
+        if ($rs != null) {
+            while ($row = $rs->FetchAssoc()) {
+                $result[] = $row;
+            }
+        }
+        return $result;
+    }
+
+    public function LoadTop10Item($cabangId,$tahun) {
+        $sql = "Select a.item_code,a.item_descs as item_name,a.nilai From vw_ar_omset_item_by_year a Where a.tahun = $tahun And a.cabang_id = $cabangId Order By a.nilai Desc Limit 10;";
+        $this->connector->CommandText = $sql;
+        $rs = $this->connector->ExecuteQuery();
+        return $rs;
+    }
+
+
+    public function GetJSonTop10Item($cabangId,$tahun){
+        $query = "Select a.item_code as kode, a.nilai,zfc_random_color() as warna From vw_ar_omset_item_by_year a Where a.tahun = $tahun And a.cabang_id = $cabangId Order By a.nilai Desc Limit 10;";
+        $this->connector->CommandText = $query;
+        $rs = $this->connector->ExecuteQuery();
+        $result = array();
+        if ($rs != null) {
+            while ($row = $rs->FetchAssoc()) {
+                $result[] = $row;
+            }
+        }
+        return $result;
+    }
 }
 
 

@@ -75,7 +75,7 @@ if ($reports != null){
         $sheet->setCellValue("A$row",$nmr);
         $sheet->getStyle("A$row")->applyFromArray($center);
         $sheet->setCellValueExplicit("B$row",$rpt["item_code"],PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue("C$row",$rpt["bnama"]);
+        $sheet->setCellValueExplicit("C$row",$rpt["bnama"],PHPExcel_Cell_DataType::TYPE_STRING);
         $sheet->setCellValue("D$row",$rpt["bsatkecil"]);
         $sheet->setCellValue("E$row",$rpt["qty_stock"]);
         if ($userTypeHarga == 1){
