@@ -387,7 +387,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
         <table cellpadding="0" cellspacing="0" class="tablePadding" align="left" style="font-size: 13px;font-family: tahoma">
             <tr>
                 <td>Cabang</td>
-                <td><input type="text" class="f1 easyui-textbox" maxlength="20" style="width: 250px" id="CabangCode" name="CabangCode" value="<?php print($purchase->CabangCode != null ? $purchase->CabangCode : $userCabCode); ?>" disabled/>
+                <td><input type="text" class="easyui-textbox" maxlength="20" style="width: 250px" id="CabangCode" name="CabangCode" value="<?php print($purchase->CabangCode != null ? $purchase->CabangCode : $userCabCode); ?>" disabled/>
                     <input type="hidden" id="CabangId" name="CabangId" value="<?php print($purchase->CabangId == null ? $userCabId : $purchase->CabangId);?>"/>
                 </td>
                 <td>Tanggal</td>
@@ -395,13 +395,13 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                 <td>Diterima</td>
                 <td><input type="text" size="12" id="ReceiptDate" name="ReceiptDate" value="<?php print($purchase->FormatReceiptDate(JS_DATE));?>" <?php print($itemsCount == 0 ? 'required' : 'readonly');?>/></td>
                 <td>No. GRN</td>
-                <td><input type="text" class="f1 easyui-textbox" maxlength="20" style="width: 150px" id="GrnNo" name="GrnNo" value="<?php print($purchase->GrnNo != null ? $purchase->GrnNo : '-'); ?>" readonly/></td>
+                <td><input type="text" class="easyui-textbox" maxlength="20" style="width: 150px" id="GrnNo" name="GrnNo" value="<?php print($purchase->GrnNo != null ? $purchase->GrnNo : '-'); ?>" readonly/></td>
             </tr>
             <tr>
                 <td>Supplier</td>
                 <td><input class="easyui-combogrid" id="SupplierId" name="SupplierId" style="width: 250px" value="<?php print($purchase->SupplierId);?>" required/></td>
                 <td>Salesman</td>
-                <td><b><input type="text" class="f1 easyui-textbox" id="SalesName" name="SalesName" size="20" maxlength="50" value="<?php print($purchase->SalesName != null ? $purchase->SalesName : '-'); ?>"/></b></td>
+                <td><b><input type="text" class="easyui-textbox" id="SalesName" name="SalesName" size="20" maxlength="50" value="<?php print($purchase->SalesName != null ? $purchase->SalesName : '-'); ?>"/></b></td>
                 <td>Status</td>
                 <td><select class="easyui-combobox" id="GrnStatus" name="GrnStatus" style="width: 150px">
                         <option value="0" <?php print($purchase->GrnStatus == 0 ? 'selected="selected"' : '');?>>0 - Draft</option>
@@ -411,11 +411,11 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                     </select>
                 </td>
                 <td>Ex. PO</td>
-                <td><input type="text" class="f1 easyui-textbox" maxlength="20" style="width: 150px" id="ExPoNo" name="ExPoNo" value="<?php print($purchase->ExPoNo != null ? $purchase->ExPoNo : '-'); ?>"/></td>
+                <td><input type="text" class="easyui-textbox" maxlength="20" style="width: 150px" id="ExPoNo" name="ExPoNo" value="<?php print($purchase->ExPoNo != null ? $purchase->ExPoNo : '-'); ?>"/></td>
             </tr>
             <tr>
                 <td>Keterangan</td>
-                <td><b><input type="text" class="f1 easyui-textbox" id="GrnDescs" name="GrnDescs" style="width: 250px" value="<?php print($purchase->GrnDescs != null ? $purchase->GrnDescs : '-'); ?>" required/></b></td>
+                <td><b><input type="text" class="easyui-textbox" id="GrnDescs" name="GrnDescs" style="width: 250px" value="<?php print($purchase->GrnDescs != null ? $purchase->GrnDescs : '-'); ?>" required/></b></td>
                 <td>Gudang *</td>
                 <td>
                     <?php if ($itemsCount == 0){?>
@@ -451,7 +451,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                     </select>
                     &nbsp
                     Kredit
-                    <input type="text" class="f1 easyui-textbox" id="CreditTerms" name="CreditTerms" size="2" maxlength="5" value="<?php print($purchase->CreditTerms != null ? $purchase->CreditTerms : 0); ?>" style="text-align: right" required/>&nbsphari</td>
+                    <input type="text" class="easyui-textbox" id="CreditTerms" name="CreditTerms" size="2" maxlength="5" value="<?php print($purchase->CreditTerms != null ? $purchase->CreditTerms : 0); ?>" style="text-align: right" required/>&nbsphari</td>
                 <td colspan="3" class="blink" style="color: orangered"><b>*Tanggal & Gudang tidak boleh diubah setelah detail diinput*</b></td>
             </tr>
             <tr>
@@ -571,7 +571,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
     <form id="fm" method="post" novalidate>
         <table cellpadding="0" cellspacing="0" class="tablePadding tableBorder" style="font-size: 12px;font-family: tahoma">
             <tr>
-                <td class="right bold">Cari Data Barang:</td>
+                <td class="right bold">Data Barang:</td>
                 <td colspan="7"><input id="aItemSearch" name="aItemSearch" style="width: 500px"/></td>
             </tr>
             <tr>
@@ -586,13 +586,13 @@ $bpdf = base_url('public/images/button/').'pdf.png';
             </tr>
             <tr>
                 <td>
-                    <input type="text" id="aItemCode" name="aItemCode" size="20" value="" required/>
+                    <input type="text" id="aItemCode" name="aItemCode" size="10" value="" required/>
                     <input type="hidden" id="aItemId" name="aItemId" value="0"/>
                     <input type="hidden" id="aId" name="aId" value="0"/>
                     <input type="hidden" id="aQtyStock" name="aQtyStock" value="0"/>
                 </td>
                 <td>
-                    <input type="text" id="aItemDescs" name="aItemDescs" size="50" value="" disabled/>
+                    <input type="text" id="aItemDescs" name="aItemDescs" size="45" value="" disabled/>
                 </td>
                 <td>
                     <input class="right" type="text" id="aQty" name="aQty" size="5" value="0"/>

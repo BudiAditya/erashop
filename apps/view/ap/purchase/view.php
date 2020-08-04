@@ -122,7 +122,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
     <table cellpadding="0" cellspacing="0" class="tablePadding" align="left" style="font-size: 13px;font-family: tahoma">
         <tr>
             <td>Cabang</td>
-            <td><input type="text" class="f1 easyui-textbox" maxlength="20" style="width: 250px" id="CabangCode" name="CabangCode" value="<?php print($purchase->CabangCode != null ? $purchase->CabangCode : $userCabCode); ?>" disabled/>
+            <td><input type="text" class="easyui-textbox" maxlength="20" style="width: 250px" id="CabangCode" name="CabangCode" value="<?php print($purchase->CabangCode != null ? $purchase->CabangCode : $userCabCode); ?>" disabled/>
                 <input type="hidden" id="CabangId" name="CabangId" value="<?php print($purchase->CabangId == null ? $userCabId : $purchase->CabangId);?>"/>
             </td>
             <td>Tanggal</td>
@@ -130,13 +130,13 @@ $bpdf = base_url('public/images/button/').'pdf.png';
             <td>Diterima</td>
             <td><input type="text" size="12" id="ReceiptDate" name="ReceiptDate" value="<?php print($purchase->FormatReceiptDate(JS_DATE));?>" /></td>
             <td>No. GRN</td>
-            <td><input type="text" class="f1 easyui-textbox" maxlength="20" style="width: 150px" id="GrnNo" name="GrnNo" value="<?php print($purchase->GrnNo != null ? $purchase->GrnNo : '-'); ?>" readonly/></td>
+            <td><input type="text" class="easyui-textbox" maxlength="20" style="width: 150px" id="GrnNo" name="GrnNo" value="<?php print($purchase->GrnNo != null ? $purchase->GrnNo : '-'); ?>" readonly/></td>
         </tr>
         <tr>
             <td>Supplier</td>
             <td><input class="easyui-combogrid" id="SupplierId" name="SupplierId" style="width: 250px" value="<?php print($purchase->SupplierId);?>" disabled/></td>
             <td>Salesman</td>
-            <td><b><input type="text" class="f1 easyui-textbox" id="SalesName" name="SalesName" size="20" maxlength="50" value="<?php print($purchase->SalesName != null ? $purchase->SalesName : '-'); ?>"/></b></td>
+            <td><b><input type="text" class="easyui-textbox" id="SalesName" name="SalesName" size="20" maxlength="50" value="<?php print($purchase->SalesName != null ? $purchase->SalesName : '-'); ?>"/></b></td>
             <td>Status</td>
             <td><select class="easyui-combobox" id="GrnStatus" name="GrnStatus" style="width: 150px" disabled>
                     <option value="0" <?php print($purchase->GrnStatus == 0 ? 'selected="selected"' : '');?>>0 - Draft</option>
@@ -146,11 +146,11 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                 </select>
             </td>
             <td>Ex. PO</td>
-            <td><input type="text" class="f1 easyui-textbox" maxlength="20" style="width: 150px" id="ExPoNo" name="ExPoNo" value="<?php print($purchase->ExPoNo != null ? $purchase->ExPoNo : '-'); ?>"/></td>
+            <td><input type="text" class="easyui-textbox" maxlength="20" style="width: 150px" id="ExPoNo" name="ExPoNo" value="<?php print($purchase->ExPoNo != null ? $purchase->ExPoNo : '-'); ?>"/></td>
         </tr>
         <tr>
             <td>Keterangan</td>
-            <td><b><input type="text" class="f1 easyui-textbox" id="GrnDescs" name="GrnDescs" style="width: 250px" value="<?php print($purchase->GrnDescs != null ? $purchase->GrnDescs : '-'); ?>" readonly/></b></td>
+            <td><b><input type="text" class="easyui-textbox" id="GrnDescs" name="GrnDescs" style="width: 250px" value="<?php print($purchase->GrnDescs != null ? $purchase->GrnDescs : '-'); ?>" readonly/></b></td>
             <td>Gudang</td>
             <td><select class="easyui-combobox" id="GudangId" name="GudangId" style="width: 150px" disabled>
                     <?php
@@ -171,7 +171,7 @@ $bpdf = base_url('public/images/button/').'pdf.png';
                 </select>
                 &nbsp
                 Kredit
-                <input type="text" class="f1 easyui-textbox" id="CreditTerms" name="CreditTerms" size="2" maxlength="5" value="<?php print($purchase->CreditTerms != null ? $purchase->CreditTerms : 0); ?>" style="text-align: right" disabled/>&nbsphari</td>
+                <input type="text" class="easyui-textbox" id="CreditTerms" name="CreditTerms" size="2" maxlength="5" value="<?php print($purchase->CreditTerms != null ? $purchase->CreditTerms : 0); ?>" style="text-align: right" disabled/>&nbsphari</td>
         </tr>
         <tr>
             <td colspan="7">
